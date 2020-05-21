@@ -1,0 +1,27 @@
+<html>
+  <head>
+    <title>GeomView</title>
+  </head>
+  <body>
+    <script src="elements_gui.js"></script>
+    <script type="text/javascript">
+      let gui = new EE.gui();
+     document.body.appendChild(gui.domElement);
+     let stage = gui.stage;
+
+     let p1 = gui.ranPt();
+     let p2 = gui.ranPt();
+     let c = EE.circle(p1, p2);
+     stage.add(p1, p2, c);
+
+     let p3 = gui.ranPt();
+     p3.style.fill = "red";
+     let sym = EE.circleCentralSymmetry(c, p3);
+     stage.add(p3, sym);
+
+     sym.style.dash = [10, 10];
+
+
+    </script>
+  </body>
+</html>

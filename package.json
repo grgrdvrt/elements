@@ -1,0 +1,21 @@
+{
+  "name": "geomview",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "http-server dist&watch 'esbuild src/index.js --bundle --outfile=dist/app.js --sourcemap' ./src",
+    "build": "esbuild src/index.js --bundle --outfile=dist/app.js --sourcemap",
+    "buildSine": "esbuild src/index_sineCircles.js --bundle --outfile=dist/app.js --sourcemap",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "esbuild": "^0.1.16",
+    "watch": "^1.0.2"
+  },
+  "dependencies": {
+    "http-server": "^0.12.1"
+  }
+}
