@@ -1,4 +1,3 @@
-
 export const circleType = "circle";
 export const lineType = "line";
 export const pointType = "point";
@@ -6,8 +5,6 @@ export const polygonType = "polygon";
 export const scalarType = "scalar";
 export const segmentType = "segment";
 export const vectorType = "vector";
-
-import {Construction} from "./Construction";
 
 function initTypes(types){
     return args => {
@@ -58,22 +55,3 @@ export function makeDispatch(...funcs){
     }
 }
 
-
-export function makeConstructor(description, types, init, update){
-    const spreadTypes = initTypes(types)
-    const constructor = function(...args){
-        const objects = init(...spreadTypes(args))
-        Object.assign(objects.output, {
-            ...objects.input,
-            construction:new Construction({
-                description,
-                ...objects,
-                update:update
-            })
-        })
-        return objects.output;
-    }
-    constructor.types = types;
-    constructor.spreadTypes = spreadTypes;
-    return constructor;
-}

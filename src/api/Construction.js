@@ -1,3 +1,5 @@
+import {initTypes} from "./types";
+
 export function updateObjects(objects, timeStamp){
     for(let k in objects){
         const obj = objects[k];
@@ -40,3 +42,23 @@ export const defaultConstruction = new Construction({
     description:"free construction",
     update: function(input, output){}
 });
+
+
+export function makeConstructor(description, types, init, update){
+    const spreadTypes = initTypes(types)
+    const constructor = function(...args){
+        const objects = init(...spreadTypes(args))
+        Object.assign(objects.output, {
+            ...objects.input,
+            construction:new Construction({
+                description,
+                ...objects,
+                update:update
+            })
+        })
+        return objects.output;
+    }
+    constructor.types = types;
+    constructor.spreadTypes = spreadTypes;
+    return constructor;
+}
