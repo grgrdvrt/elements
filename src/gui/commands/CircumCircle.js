@@ -1,5 +1,5 @@
 import SelectOrCreatePoint from "./SelectOrCreatePoint";
-import {circumCircle} from "../../objects/circle";
+import {circumCircle} from "../../constructions/circle";
 export default class CircumCircle{
     constructor(stage, mouse){
         let p1, p2;

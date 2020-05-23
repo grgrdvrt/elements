@@ -1,4 +1,4 @@
-import * as point from "../objects/point";
+import * as point from "../constructions/point";
 import {
     circleType,
     lineType,

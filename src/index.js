@@ -1,5 +1,6 @@
 import * as api from "./api";
 import Gui from "./gui/CompleteGui";
+objects
 
 const gui = new Gui();
 document.body.appendChild(gui.domElement);

@@ -2,8 +2,8 @@ import {Vector2} from "../../maths";
 
 export function drawPoint(stage, point){
     const radius = 5;
-    const x = point.geom.x;
-    const y = point.geom.y;
+    const x = point.output.x;
+    const y = point.output.y;
 
     const ctx = stage.ctx;
 
@@ -30,8 +30,8 @@ export function drawPoint(stage, point){
 }
 
 export function drawCircle(stage, circle){
-    const c = circle.geom.center;
-    const r = circle.geom.radius;
+    const c = circle.output.center;
+    const r = circle.output.radius;
 
     const ctx = stage.ctx;
     ctx.beginPath();
@@ -59,9 +59,9 @@ export function drawCircle(stage, circle){
 }
 
 export function drawSegment(stage, segment){
-    let ctx = stage.ctx;
-    let p1 = segment.geom.p1;
-    let p2 = segment.geom.p2;
+    const ctx = stage.ctx;
+    const p1 = segment.output.p1;
+    const p2 = segment.output.p2;
     ctx.beginPath();
     ctx.save();
     ctx.translate(stage.translation.x, stage.translation.y);
@@ -70,7 +70,7 @@ export function drawSegment(stage, segment){
     ctx.lineTo(p2.x, p2.y);
     ctx.restore();
 
-    let style = segment.style;
+    const style = segment.style;
     ctx.save();
     if(style.stroke!== undefined){
         ctx.strokeStyle = style.stroke.toString();
@@ -83,10 +83,10 @@ export function drawSegment(stage, segment){
 }
 
 export function drawLine(stage, line){
-    let l = line.geom;
-    let ctx = stage.ctx;
+    const l = line.output;
+    const ctx = stage.ctx;
     ctx.beginPath();
-    let w = stage.window;
+    const w = stage.window;
     ctx.save();
     ctx.translate(stage.translation.x, stage.translation.y);
     ctx.scale(stage.scale.x, stage.scale.y);
@@ -100,7 +100,7 @@ export function drawLine(stage, line){
     }
     ctx.restore();
 
-    let style = line.style;
+    const style = line.style;
     ctx.save();
     if(style.stroke !== undefined){
         ctx.strokeStyle = style.stroke.toString();
@@ -113,9 +113,9 @@ export function drawLine(stage, line){
 }
 
 export function drawVector(stage, vector){
-    let ctx = stage.ctx;
-    let p1 = vector.geom.p1;
-    let p2 = vector.geom.p2;
+    const ctx = stage.ctx;
+    const p1 = vector.output.p1;
+    const p2 = vector.output.p2;
     ctx.beginPath();
     ctx.save();
     ctx.translate(stage.translation.x, stage.translation.y);
@@ -123,7 +123,7 @@ export function drawVector(stage, vector){
     ctx.moveTo(p1.x, p1.y);
     ctx.lineTo(p2.x, p2.y);
     ctx.restore();
-    let style = vector.style;
+    const style = vector.style;
     ctx.save();
     if(style.stroke!== undefined){
         ctx.strokeStyle = style.stroke.toString();
@@ -138,14 +138,14 @@ export function drawVector(stage, vector){
     ctx.save();
     ctx.translate(stage.translation.x, stage.translation.y);
     ctx.scale(stage.scale.x, stage.scale.y);
-    let arrowLength = 5 / stage.scale.x;
-    let arrowWidth = 5 / stage.scale.x;
-    let end = p2;
-    let diff = p2.clone().sub(p1);
+    const arrowLength = 5 / stage.scale.x;
+    const arrowWidth = 5 / stage.scale.x;
+    const end = p2;
+    const diff = p2.clone().sub(p1);
 
-    let length = diff.clone().setLength(arrowLength);
-    let width = diff.clone().setLength(arrowWidth);
-    let end2 = end.clone().sub(length);
+    const length = diff.clone().setLength(arrowLength);
+    const width = diff.clone().setLength(arrowWidth);
+    const end2 = end.clone().sub(length);
 
     ctx.moveTo(end.x, end.y);
     ctx.lineTo(end2.x + width.y, end2.y - width.x);
@@ -163,14 +163,14 @@ export function drawVector(stage, vector){
 }
 
 export function drawPolygon(stage, polygon){
-    let ctx = stage.ctx;
+    const ctx = stage.ctx;
     ctx.beginPath();
     ctx.save();
     ctx.translate(stage.translation.x, stage.translation.y);
     ctx.scale(stage.scale.x, stage.scale.y);
-    let pts = polygon.geom;
-    let n = pts.length;
-    let p = pts[n - 1];
+    const pts = polygon.output;
+    const n = pts.length;
+    const p = pts[n - 1];
     ctx.moveTo(p.x, p.y);
     for(let i = 0; i < n; i++){
         p = pts[i];
@@ -178,7 +178,7 @@ export function drawPolygon(stage, polygon){
     }
     ctx.restore();
 
-    let style = polygon.style;
+    const style = polygon.style;
     ctx.save();
     if(style.stroke!== undefined){
         ctx.strokeStyle = style.stroke.toString();

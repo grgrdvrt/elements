@@ -1,13 +1,13 @@
 export * from "./Construction";
 export * from "./selection";
 
-export * from "../objects/point";
-export * from "../objects/line";
-export * from "../objects/circle";
-export * from "../objects/segment";
-export * from "../objects/functionGraph";
-export * from "../objects/scalar";
-export * from "../objects/vector";
-export * from "../objects/polygon";
+export * from "../constructions/point";
+export * from "../constructions/line";
+export * from "../constructions/circle";
+export * from "../constructions/segment";
+export * from "../constructions/functionGraph";
+export * from "../constructions/scalar";
+export * from "../constructions/vector";
+export * from "../constructions/polygon";
 
 
