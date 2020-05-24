@@ -36,9 +36,9 @@ export const lineFromPoints = makeTypedFunction(
         ...baseLine(),
         description:"line from points",
         input:{p1, p2},
-        update({input, geom}){
-            geom.point.copy(input.p1.geom);
-            geom.vector.copy(input.p2.geom).sub(p1.geom);
+        update({geom}){
+            geom.point.copy(p1.geom);
+            geom.vector.copy(p2.geom).sub(p1.geom);
         }
     })
 );
@@ -51,8 +51,8 @@ export const lineFromPointVector = makeTypedFunction(
         description:"line from (point, vector)",
         ...baseLine(),
         input:{point, vector},
-        update({input, geom}){
-            geom.set(input.point.geom, input.vector.geom);
+        update({geom}){
+            geom.set(point.geom, vector.geom);
         }
     })
 );
