@@ -2,8 +2,6 @@ import {drawVector} from "../gui/graphics/drawing";
 import Style from "../gui/graphics/Style";
 import * as maths from "../maths";
 
-import {Construction} from "../api/Construction";
-
 
 import {
     circleType,

@@ -1,15 +1,19 @@
-import {initTypes} from "./types";
-
-function updateObject(object, timeStamp){
+export function updateObject(object, timeStamp){
     if(object.lastUpdated >= timeStamp){
         return;
     }
-    for(let input of object.inputs){
-        updateObject(input, timeStamp);
+    if(object.input){
+        for(let name in object.input){
+            updateObject(object.input[name], timeStamp);
+        }
     }
-    for(let helper of object.helpers){
-        updateObject(helper, timeStamp);
+    if(object.helpers){
+        for(let name in object.helpers){
+            updateObject(object.helpers[name], timeStamp);
+        }
     }
-    object.update(object, timeStamp);
+    if(object.update){
+        object.update(object, timeStamp);
+    }
     object.lastUpdated = timeStamp;
 }

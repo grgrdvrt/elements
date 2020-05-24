@@ -16,7 +16,10 @@ import {
 } from "../api/types";
 
 
-import {makeDispatch} from "../api/types";
+import {
+    makeTypedFunction,
+    makeDispatch
+} from "../api/types";
 
 export function baseCircle(){
     return {
@@ -50,38 +53,47 @@ export const circleCentralSymmetry = (c, center) => ({
     }
 });
 
-export const circumCircle = (p1, p2, p3) => ({
-    ...baseCircle(),
-    description : "circum circle",
-    input : {p1, p2, p3},
-    helpers : {center : circumCenter(p1, p2, p3)},
-    update({geom, helpers}){
-        geom.center.copy(helpers.center.geom);
-        geom.radius = maths.Vector2.dist(helpers.center.geom, p1.geom);
-    }
-});
+export const circumCircle = makeTypedFunction(
+    [pointType, pointType, pointType],
+    (p1, p2, p3) => ({
+        ...baseCircle(),
+        description : "circum circle",
+        input : {p1, p2, p3},
+        helpers : {center : circumCenter(p1, p2, p3)},
+        update({geom, helpers}){
+            geom.center.copy(helpers.center.geom);
+            geom.radius = maths.Vector2.dist(helpers.center.geom, p1.geom);
+        }
+    })
+)
 
 
-export const circleFromCenterPoint = (center, point) => ({
-    ...baseCircle(),
-    description:"Circle from (center, point)",
-    input:{center, point},
-    update({geom}){
-        geom.center.copy(center.geom);
-        geom.radius = maths.Vector2.dist(geom.center, point.geom);
-    }
-});
+export const circleFromCenterPoint = makeTypedFunction(
+    [pointType, pointType],
+    (center, point) => ({
+        ...baseCircle(),
+        description:"Circle from (center, point)",
+        input:{center, point},
+        update({geom}){
+            geom.center.copy(center.geom);
+            geom.radius = maths.Vector2.dist(geom.center, point.geom);
+        }
+    })
+);
 
 
-export const circleFromCenterRadius = (center, radius) => ({
-    ...baseCircle(),
-    description:"Circle from (center, radius)",
-    input:{center, radius:scalar(radius)},
-    update({geom}){
-        geom.center.copy(center.geom);
-        geom.radius = radius.value;
-    }
-});
+export const circleFromCenterRadius = makeTypedFunction(
+    [pointType, scalarType],
+    (center, radius) => ({
+        ...baseCircle(),
+        description:"Circle from (center, radius)",
+        input:{center, radius:scalar(radius)},
+        update({geom}){
+            geom.center.copy(center.geom);
+            geom.radius = radius.value;
+        }
+    })
+);
 
 
 export const circle = makeDispatch(

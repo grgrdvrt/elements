@@ -1,4 +1,5 @@
 import * as maths from "../maths";
+import {updateObject} from "../api/construction";
 
 export class Stage {
     constructor(canvas, params){
@@ -59,7 +60,7 @@ export class Stage {
                 this._drawItems(item, frameId);
             }
             else {
-                item.construction.update(frameId);
+                updateObject(item, frameId);
                 item.drawingFunc(this, item);
             }
         });

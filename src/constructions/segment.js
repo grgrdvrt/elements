@@ -2,8 +2,6 @@ import {drawSegment} from "../gui/graphics/drawing";
 import Style from "../gui/graphics/Style";
 import * as maths from "../maths";
 
-import {Construction} from "../api/Construction";
-
 import {
     circleType,
     lineType,
@@ -23,20 +21,6 @@ export function baseSegment(){
   };
 }
 
-export function segment(...params){
-  if(params.length === 1 && params[0].type === vectorType){
-    return segmentFromVector(params[0]);
-  }
-  else if(params[0].type === pointType && params[1].type === pointType){
-    return segmentFromPoints(params[0], params[1]);
-  }
-  else if(params[0].type === pointType && params[1].type === vectorType){
-    return segmentFromPointVector(params[0], params[1]);
-  }
-  else {
-    throw new Error("no line constructor for given params : " + params.join(", "));
-  }
-}
 
 
 export const segmentFromPoints = (p1, p2) => ({
@@ -68,3 +52,18 @@ export const segmentFromPointVector = (point, vector) => ({
         geom.copy(point.geom).add(vector.geom);
     }
 });
+
+export function segment(...params){
+    if(params.length === 1 && params[0].type === vectorType){
+        return segmentFromVector(params[0]);
+    }
+    else if(params[0].type === pointType && params[1].type === pointType){
+        return segmentFromPoints(params[0], params[1]);
+    }
+    else if(params[0].type === pointType && params[1].type === vectorType){
+        return segmentFromPointVector(params[0], params[1]);
+    }
+    else {
+        throw new Error("no line constructor for given params : " + params.join(", "));
+    }
+}

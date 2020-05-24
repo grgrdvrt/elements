@@ -2,8 +2,8 @@ import {Vector2} from "../../maths";
 
 export function drawPoint(stage, point){
     const radius = 5;
-    const x = point.output.x;
-    const y = point.output.y;
+    const x = point.geom.x;
+    const y = point.geom.y;
 
     const ctx = stage.ctx;
 
@@ -30,8 +30,8 @@ export function drawPoint(stage, point){
 }
 
 export function drawCircle(stage, circle){
-    const c = circle.output.center;
-    const r = circle.output.radius;
+    const c = circle.geom.center;
+    const r = circle.geom.radius;
 
     const ctx = stage.ctx;
     ctx.beginPath();
@@ -60,8 +60,8 @@ export function drawCircle(stage, circle){
 
 export function drawSegment(stage, segment){
     const ctx = stage.ctx;
-    const p1 = segment.output.p1;
-    const p2 = segment.output.p2;
+    const p1 = segment.geom.p1;
+    const p2 = segment.geom.p2;
     ctx.beginPath();
     ctx.save();
     ctx.translate(stage.translation.x, stage.translation.y);
@@ -83,7 +83,7 @@ export function drawSegment(stage, segment){
 }
 
 export function drawLine(stage, line){
-    const l = line.output;
+    const l = line.geom;
     const ctx = stage.ctx;
     ctx.beginPath();
     const w = stage.window;
@@ -114,8 +114,8 @@ export function drawLine(stage, line){
 
 export function drawVector(stage, vector){
     const ctx = stage.ctx;
-    const p1 = vector.output.p1;
-    const p2 = vector.output.p2;
+    const p1 = vector.geom.p1;
+    const p2 = vector.geom.p2;
     ctx.beginPath();
     ctx.save();
     ctx.translate(stage.translation.x, stage.translation.y);
@@ -168,9 +168,9 @@ export function drawPolygon(stage, polygon){
     ctx.save();
     ctx.translate(stage.translation.x, stage.translation.y);
     ctx.scale(stage.scale.x, stage.scale.y);
-    const pts = polygon.output;
+    const pts = polygon.geom;
     const n = pts.length;
-    const p = pts[n - 1];
+    let p = pts[n - 1];
     ctx.moveTo(p.x, p.y);
     for(let i = 0; i < n; i++){
         p = pts[i];

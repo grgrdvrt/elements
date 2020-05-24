@@ -2,10 +2,6 @@ import {drawPoint} from "../gui/graphics/drawing";
 import Style from "../gui/graphics/Style";
 import * as maths from "../maths";
 
-import {
-    Construction,
-    defaultConstruction
-} from "../api/Construction";
 import {segmentBissector} from "./line"
 import {segment} from "./segment"
 
@@ -33,7 +29,6 @@ export function basePoint(){
 export function point(x, y){
     const pt = basePoint();
     pt.geom.set(x, y);
-    pt.construction = defaultConstruction;
     return pt;
 }
 
@@ -173,18 +168,19 @@ export const mouse = (stage, mouse) => ({
     selectable : false,
     description:"mouse",
     input:{},
-    update({input, geom}){
+    update({geom}){
+        console.log(geom, mouse.position)
         geom.copy(mouse.position);
     }
 });
 
 export const pointCentralSymmetry = (point, center) => ({
-        ...basePoint(),
-        description:"point central symmetry",
-        input:{point, center},
-        update({geom}){
-            maths.pointCentralSymmetry(geom.copy(point.geom), center);
-        }
+    ...basePoint(),
+    description:"point central symmetry",
+    input:{point, center},
+    update({geom}){
+        maths.pointCentralSymmetry(geom.copy(point.geom), center);
+    }
 });
 
 export const pointAxialSymmetry = (point, axis) => ({
@@ -202,14 +198,14 @@ export const pointAxialSymmetry = (point, axis) => ({
  */
 export function pointOnObject(obj, position){
     switch(obj.type){
-        case pointType:
-            return obj;
-        case circleType:
-            return pointOnCircle(obj, position);
-        case lineType:
-            return pointOnLine(obj, position);
-        default :
-            throw new Error("no implementation for type : " + obj.type);
-            break;
+    case pointType:
+        return obj;
+    case circleType:
+        return pointOnCircle(obj, position);
+    case lineType:
+        return pointOnLine(obj, position);
+    default :
+        throw new Error("no implementation for type : " + obj.type);
+        break;
     }
 }

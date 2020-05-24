@@ -85,7 +85,7 @@ export default class CompleteGui{
     update(){
         let timeStamp = Date.now();
         this.updateCallback(timeStamp);
-        this.mouseCircle.radius.value = 10 / Math.abs(this.stage.scale.x);
+        this.mouseCircle.input.radius.value = 10 / Math.abs(this.stage.scale.x);
         let w = this.stage.window;
         this.stage.clear();
         this.stage.draw(timeStamp);

@@ -4,11 +4,6 @@ import * as maths from "../maths";
 import {basePoint} from "./point"
 
 import {
-    defaultConstruction,
-    Construction
-} from "../api/Construction";
-
-import {
     circleType,
     lineType,
     pointType,
@@ -60,7 +55,5 @@ export function polygon(...pts){
     if(pts[0].type === pointType){
         pts = pts.map(p => p.geom);
     }
-    const poly = basePolygon(pts);
-    poly.construction = defaultConstruction;
-    return poly;
+    return basePolygon(pts);
 }
