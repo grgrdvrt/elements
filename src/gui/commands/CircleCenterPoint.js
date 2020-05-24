@@ -26,13 +26,13 @@ export class CircleCenterPoint{
 
   onCenter(center){
     this.center = center;
-    this.pointTemp = api.mouse(this.stage, this.mouse);
-    this.circle = api.circle(this.center, this.pointTemp);
-    this.circle.selectable = false;
+    this.tempPoint = api.mouse(this.stage, this.mouse);
+tempCircle = api.circle(this.center, this.tempPoint);
+    this.tempCircle.selectable = false;
     this.center.selectable = false;
-    this.pointTemp.selectable = false;
-    this.stage.add(this.circle);
-    this.stage.add(this.pointTemp);
+    this.tempPoint.selectable = false;
+    this.stage.add(this.tempCircle);
+    this.stage.add(this.tempPoint);
 
     this.centerCommand.completed.remove(this.onCenter, this);
     this.centerCommand.disable();
@@ -49,11 +49,11 @@ export class CircleCenterPoint{
     this.pointCommand.completed.remove(this.onCenter, this);
     this.pointCommand.disable();
 
-    this.circle.input.point = this.point;
-    this.circle.selectable = true;
+    this.circle = api.circle(this.center, this.point);
     this.center.selectable = true;
     this.point.selectable = true;
-    this.stage.remove(this.pointTemp);
+    this.stage.remove(this.tempPoint);
+    this.stage.remove(this.tempCircle);
 
     this.completed.dispatch(this.circle);
   }
@@ -61,7 +61,7 @@ export class CircleCenterPoint{
   cancel(){
     if(this.center){
       this.centerCommand.undo();
-      this.stage.remove(this.circle);
+      this.stage.remove(this.tempCircle);
       this.pointCommand.completed.remove(this.onCenter, this);
       this.pointCommand.disable();
     }
@@ -76,6 +76,6 @@ export class CircleCenterPoint{
   redo(){
     this.centerCommand.redo();
     this.pointCommand.redo();
-    this.stage.add(this.line);
+    this.stage.add(this.circle);
   }
 }
