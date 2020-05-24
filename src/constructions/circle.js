@@ -33,25 +33,31 @@ export function baseCircle(){
 }
 
 
-export const circleAxialSymmetry = (c, axis) => ({
-    ...baseCircle(),
-    description : "circle axial symmetry",
-    input : {c, axis},
-    update({geom}){
-        geom.copy(c.geom);
-        maths.circleAxialSymmetry(geom, axis.geom);
-    }
-});
+export const circleAxialSymmetry = makeTypedFunction(
+    [circleType, lineType],
+    (c, axis) => ({
+        ...baseCircle(),
+        description : "circle axial symmetry",
+        input : {c, axis},
+        update({geom}){
+            geom.copy(c.geom);
+            maths.circleAxialSymmetry(geom, axis.geom);
+        }
+    })
+);
 
-export const circleCentralSymmetry = (c, center) => ({
-    ...baseCircle(),
-    description:"circle central symmetry",
-    input : {c, center},
-    update({geom}){
-        geom.copy(c.geom);
-        maths.circleCentralSymmetry(geom, center.geom);
-    }
-});
+export const circleCentralSymmetry = makeTypedFunction(
+    [circleType, pointType],
+    (c, center) => ({
+        ...baseCircle(),
+        description:"circle central symmetry",
+        input : {c, center},
+        update({geom}){
+            geom.copy(c.geom);
+            maths.circleCentralSymmetry(geom, center.geom);
+        }
+    })
+);
 
 export const circumCircle = makeTypedFunction(
     [pointType, pointType, pointType],

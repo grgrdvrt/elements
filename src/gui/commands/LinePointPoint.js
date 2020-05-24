@@ -45,12 +45,12 @@ export class LinePointPoint{
 
   onP2(p2){
     this.p2 = p2;
+      console.log(this.p2);
 
-
-    this.p2Command.completed.remove(this.onP1, this);
+    this.p2Command.completed.remove(this.onP2, this);
     this.p2Command.disable();
 
-    this.line.construction.src.p2 = this.p2;
+    this.line.input.p2 = this.p2;
     this.line.selectable = true;
     this.p1.selectable = true;
     this.p2.selectable = true;

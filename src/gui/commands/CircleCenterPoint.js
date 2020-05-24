@@ -49,7 +49,7 @@ export class CircleCenterPoint{
     this.pointCommand.completed.remove(this.onCenter, this);
     this.pointCommand.disable();
 
-    this.circle.construction.src.point = this.point;
+    this.circle.input.point = this.point;
     this.circle.selectable = true;
     this.center.selectable = true;
     this.point.selectable = true;

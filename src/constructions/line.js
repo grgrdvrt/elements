@@ -14,6 +14,8 @@ import {
     scalarType,
     segmentType,
     vectorType,
+
+    makeTypedFunction,
 } from "../api/types";
 
 export function baseLine(){
@@ -28,65 +30,82 @@ export function baseLine(){
 }
 
 
-export const lineFromPoints = (p1, p2) => ({
-    ...baseLine(),
-    description:"line from points",
-    input:{p1, p2},
-    geom:line,
-    update({geom}){
-        geom.point.copy(p1.geom);
-        geom.vector.copy(p2.geom).sub(p1.geom);
-    }
-});
-
-
-export const lineFromPointVector = (point, vector) => ({
-    description:"line from (point, vector)",
-    ...baseLine(),
-    input:{point, vector},
-    geom:line,
-    update({geom}){
-        geom.set(point.geom, vector.geom);
-    }
-});
-
-
-export const perpendicular = (line, point) => {
-    return lineFromPoints(point, pointOnPerpendicular(line, point));
-};
-
-export const segmentBissector = segment => ({
-    description:"segment bissector",
-    ...baseLine(),
-    input:{segment},
-    update({geom}){
-        const p1 = segment.geom.p1;
-        const p2 = segment.geom.p2;
-        geom.point.lerp(p1, p2, 0.5);
-        geom.vector.set(p1.y - p2.y, p2.x - p1.x);
-    }
-});
-
-export const angleBissector = (p1, p2, p3) => {
-    const tmp = new maths.Vector2()
-    return {
-        description:"angle bissector",
+export const lineFromPoints = makeTypedFunction(
+    [pointType, pointType],
+    (p1, p2) => ({
         ...baseLine(),
-        input:{p1, p2, p3},
-        geom:line,
+        description:"line from points",
+        input:{p1, p2},
         update({input, geom}){
-            const p1 = input.p1.geom;
-            const p2 = input.p2.geom;
-            const p3 = input.p3.geom;
-            const len = maths.Vector2.dist(p2, p3)
-            tmp.copy(p1).sub(p2).setLength(len).add(p2);
-            tmp.lerp(tmp, p3, 0.5);
-
-            geom.point.copy(p2);
-            geom.vector.copy(tmp).sub(p2).normalize();
+            geom.point.copy(input.p1.geom);
+            geom.vector.copy(input.p2.geom).sub(p1.geom);
         }
-    };
-};
+    })
+);
+
+
+
+export const lineFromPointVector = makeTypedFunction(
+    [pointType, vectorType],
+    (point, vector) => ({
+        description:"line from (point, vector)",
+        ...baseLine(),
+        input:{point, vector},
+        update({input, geom}){
+            geom.set(input.point.geom, input.vector.geom);
+        }
+    })
+);
+
+
+
+export const perpendicular = makeTypedFunction(
+    [lineType, pointType],
+    (line, point) => {
+        return lineFromPoints(point, pointOnPerpendicular(line, point));
+    }
+);
+
+
+export const segmentBissector = makeTypedFunction(
+    [segmentType],
+    segment => ({
+        description:"segment bissector",
+        ...baseLine(),
+        input:{segment},
+        update({geom}){
+            const p1 = segment.geom.p1;
+            const p2 = segment.geom.p2;
+            geom.point.lerp(p1, p2, 0.5);
+            geom.vector.set(p1.y - p2.y, p2.x - p1.x);
+        }
+    })
+);
+
+
+export const angleBissector = makeTypedFunction(
+    [pointType, pointType, pointType],
+    (p1, p2, p3) => {
+        const tmp = new maths.Vector2();
+        return {
+            description:"angle bissector",
+            ...baseLine(),
+            input:{p1, p2, p3},
+            update({input, geom}){
+                const p1 = input.p1.geom;
+                const p2 = input.p2.geom;
+                const p3 = input.p3.geom;
+                const len = maths.Vector2.dist(p2, p3);
+                tmp.copy(p1).sub(p2).setLength(len).add(p2);
+                tmp.lerp(tmp, p3, 0.5);
+
+                geom.point.copy(p2);
+                geom.vector.copy(tmp).sub(p2).normalize();
+            }
+        };
+    }
+);
+
 
 export function line(a, b){
     if(a.type === pointType && b.type === pointType){
