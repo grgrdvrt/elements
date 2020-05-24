@@ -24,16 +24,12 @@ export function baseVector(){
   };
 }
 
-export function vector(p1, p2){
-  const vector = baseVector();
-  vector.construction = new Construction({
+export const vector = (p1, p2) => ({
+    ...baseVector(),
+    description:"Vector point point",
     input:{p1, p2},
-    output:vector,
-    update(input, output){
-      const s = output.geom;
-      s.p1.copy(input.p1.geom);
-      s.p2.copy(input.p2.geom);
+    update({geom}){
+      geom.p1.copy(p1.geom);
+      geom.p2.copy(p2.geom);
     }
-  });
-  return vector;
-}
+});

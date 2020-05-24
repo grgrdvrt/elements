@@ -34,7 +34,7 @@ export const circleAxialSymmetry = (c, axis) => ({
     ...baseCircle(),
     description : "circle axial symmetry",
     input : {c, axis},
-    update : ({geom}) => {
+    update({geom}){
         geom.copy(c.geom);
         maths.circleAxialSymmetry(geom, axis.geom);
     }
@@ -44,7 +44,7 @@ export const circleCentralSymmetry = (c, center) => ({
     ...baseCircle(),
     description:"circle central symmetry",
     input : {c, center},
-    update : ({geom}) => {
+    update({geom}){
         geom.copy(c.geom);
         maths.circleCentralSymmetry(geom, center.geom);
     }
@@ -55,7 +55,7 @@ export const circumCircle = (p1, p2, p3) => ({
     description : "circum circle",
     input : {p1, p2, p3},
     helpers : {center : circumCenter(p1, p2, p3)},
-    update : ({geom, helpers}) => {
+    update({geom, helpers}){
         geom.center.copy(helpers.center.geom);
         geom.radius = maths.Vector2.dist(helpers.center.geom, p1.geom);
     }
@@ -66,7 +66,7 @@ export const circleFromCenterPoint = (center, point) => ({
     ...baseCircle(),
     description:"Circle from (center, point)",
     input:{center, point},
-    update:({geom}) => {
+    update({geom}){
         geom.center.copy(center.geom);
         geom.radius = maths.Vector2.dist(geom.center, point.geom);
     }
@@ -77,7 +77,7 @@ export const circleFromCenterRadius = (center, radius) => ({
     ...baseCircle(),
     description:"Circle from (center, radius)",
     input:{center, radius:scalar(radius)},
-    update:({geom}) => {
+    update({geom}){
         geom.center.copy(center.geom);
         geom.radius = radius.value;
     }

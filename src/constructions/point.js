@@ -49,7 +49,7 @@ export const middle = (segment) => ({
     description:"segment middle",
     ...basePoint(),
     input:{segment},
-    update : ({input, geom}) => {
+    update({input, geom}){
         geom.lerp(input.segment.geom.p1, input.segment.geom.p2, 0.5);
     }
 });
@@ -59,7 +59,7 @@ export const pointOnPerpendicular = (line, point) => ({
     description:"point on perpendicular",
     ...basePoint(),
     input:{line, point},
-    update : ({input, geom}) => {
+    update({input, geom}){
         const pt = input.point.geom;
         const v = input.line.geom.vector;
         geom.set(pt.x - v.y, pt.y + v.y);
@@ -76,7 +76,7 @@ export const barycenter = (pts, weights) => {
         ...basePoint(),
         input:{pts, weights},
         helpers:{},
-        update : ({geom}) => {
+        update({geom}){
             geom.set(0, 0);
             pts.forEach((pt, i) => {
                 geom.add(tmp.copy(pt.geom).multiplyScalar(weights[i]));
@@ -95,7 +95,7 @@ export const circumCenter = (p1, p2, p3) => {
         ...basePoint(),
         input:{p1, p2, p3},
         helpers:{l1, l2},
-        update : ({geom, helpers}) => {
+        update({geom, helpers}){
             maths.linesIntersection(helpers.l1.geom, helpers.l2.geom, geom);
         }
     };
@@ -107,7 +107,7 @@ export const lineCircleIntersections = (line, circle) => {
         description:"line circle intersections",
         input:{line, circle},
         output : [basePoint(), basePoint()],
-        update : ({output}) => {
+        update({output}){
             maths.lineCircleIntersection(line.geom, circle.geom, output[0].geom, output[1].geom);
         }
     };
@@ -122,7 +122,7 @@ export const circlesIntersections = (c1, c2) => {
         output:[
             basePoint(), basePoint()
         ],
-        update : ({output}) => {
+        update({output}){
             maths.circlesIntersections(c1.geom, c2.geom, output[0].geom, output[1].geom);
         }
     };
@@ -135,7 +135,7 @@ export function linesIntersection(l1, l2){
         ...pt,
         description:"lines intersection",
         input:{l1, l2},
-        update : ({geom}) => {
+        update({geom}){
             maths.linesIntersection(l1.geom, l2.geom, geom);
         }
     };
@@ -148,7 +148,7 @@ export const pointOnLine = (line, position) => {
         ...pt,
         description:"point on line",
         input:{line},
-        update : ({geom}) => {
+        update({geom}){
             maths.projectVectorOnLine(geom, line.geom);
         }
     };
@@ -161,7 +161,7 @@ export const pointOnCircle = (circle, position) => {
         ...pt,
         description:"point on circle",
         input:{circle},
-        update : ({geom}) => {
+        update({geom}){
             maths.projectVectorOnCircle(geom, circle.geom, geom);
         }
     };
@@ -173,7 +173,7 @@ export const mouse = (stage, mouse) => ({
     selectable : false,
     description:"mouse",
     input:{},
-    update : ({input, geom}) => {
+    update({input, geom}){
         geom.copy(mouse.position);
     }
 });
@@ -182,7 +182,7 @@ export const pointCentralSymmetry = (point, center) => ({
         ...basePoint(),
         description:"point central symmetry",
         input:{point, center},
-        update : ({geom}) => {
+        update({geom}){
             maths.pointCentralSymmetry(geom.copy(point.geom), center);
         }
 });
@@ -191,7 +191,7 @@ export const pointAxialSymmetry = (point, axis) => ({
     ...basePoint(),
     description:"point axial symmetry",
     input:{point, axis},
-    update : ({geom}) => {
+    update({geom}){
         maths.pointaxialSymmetry(geom.copy(point.geom), axis);
     }
 });

@@ -33,7 +33,7 @@ export const lineFromPoints = (p1, p2) => ({
     description:"line from points",
     input:{p1, p2},
     geom:line,
-    update : ({geom}) => {
+    update({geom}){
         geom.point.copy(p1.geom);
         geom.vector.copy(p2.geom).sub(p1.geom);
     }
@@ -45,7 +45,7 @@ export const lineFromPointVector = (point, vector) => ({
     ...baseLine(),
     input:{point, vector},
     geom:line,
-    update : ({geom}) => {
+    update({geom}){
         geom.set(point.geom, vector.geom);
     }
 });
@@ -59,7 +59,7 @@ export const segmentBissector = segment => ({
     description:"segment bissector",
     ...baseLine(),
     input:{segment},
-    update : ({geom}) => {
+    update({geom}){
         const p1 = segment.geom.p1;
         const p2 = segment.geom.p2;
         geom.point.lerp(p1, p2, 0.5);
@@ -74,7 +74,7 @@ export const angleBissector = (p1, p2, p3) => {
         ...baseLine(),
         input:{p1, p2, p3},
         geom:line,
-        update : ({input, geom}) => {
+        update({input, geom}){
             const p1 = input.p1.geom;
             const p2 = input.p2.geom;
             const p3 = input.p3.geom;
