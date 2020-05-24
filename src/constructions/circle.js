@@ -17,7 +17,6 @@ import {
 
 
 import {makeDispatch} from "../api/types";
-import {makeConstructor} from "../api/Construction";
 
 export function baseCircle(){
     return {
@@ -32,97 +31,55 @@ export function baseCircle(){
 
 
 export const circleAxialSymmetry = (c, axis) => ({
-    description : "circle axial symmetry",
     ...baseCircle(),
+    description : "circle axial symmetry",
     input : {c, axis},
-    update : ({input, geom}) => {
-        geom.copy(input.c.geom);
-        maths.circleAxialSymmetry(geom, input.axis.geom);
+    update : ({geom}) => {
+        geom.copy(c.geom);
+        maths.circleAxialSymmetry(geom, axis.geom);
     }
 });
 
 export const circleCentralSymmetry = (c, center) => ({
-    description:"circle central symmetry",
     ...baseCircle(),
+    description:"circle central symmetry",
     input : {c, center},
-    update : ({input, geom}) => {
-        geom.copy(input.c.geom);
-        maths.circleCentralSymmetry(geom, input.center.geom);
+    update : ({geom}) => {
+        geom.copy(c.geom);
+        maths.circleCentralSymmetry(geom, center.geom);
     }
 });
 
 export const circumCircle = (p1, p2, p3) => ({
+    ...baseCircle(),
     description : "circum circle",
     input : {p1, p2, p3},
     helpers : {center : circumCenter(p1, p2, p3)},
-    ...baseCircle(),
-    update : ({input, geom, helpers}) => {
+    update : ({geom, helpers}) => {
         geom.center.copy(helpers.center.geom);
-        geom.radius = maths.Vector2.dist(helpers.center.geom, input.p1.geom);
+        geom.radius = maths.Vector2.dist(helpers.center.geom, p1.geom);
     }
 });
 
-// export const circumCircle = makeConstructor(
-//     "circum circle",
-//     [pointType, pointType, pointType],
-//     (p1, p2, p3) => ({
-//         input:{p1, p2, p3},
-//         helpers:{center:circumCenter(p1, p2, p3)},
-//         geom : baseCircle(),
-//     }),
-//     (input, geom, helpers) => {
-//         const center = helpers.center;
-//         const circle = geom.geom;
-//         circle.center.copy(center.geom);
-//         circle.radius = maths.Vector2.dist(center.geom, input.p1.geom);
-//     }
-// );
-
-
-
-// export function circumCircle(p1, p2, p3){
-//   const circle = baseCircle();
-//   const center = circumCenter(p1, p2, p3);
-//   Object.assign(circle, {
-//     center,
-//     p1, p2, p3,
-//     construction : new Construction({
-//       description:"circum circle",
-//       input : {p1, p2, p3},
-//       geom : circle,
-//       helpers : {center},
-//       update : function(input, geom, helpers){
-//         const center = helpers.center;
-//         const circle = geom.geom;
-//         circle.center.copy(center.geom);
-//         circle.radius = maths.Vector2.dist(center.geom, input.p1.geom);
-//       }
-//     })
-//   });
-//   return circle;
-// }
 
 export const circleFromCenterPoint = (center, point) => ({
+    ...baseCircle(),
     description:"Circle from (center, point)",
     input:{center, point},
-    ...baseCircle(),
-    update:(input, geom) => {
-        geom.center.copy(input.center.geom);
-        geom.radius = maths.Vector2.dist(geom.center, input.point.geom);
+    update:({geom}) => {
+        geom.center.copy(center.geom);
+        geom.radius = maths.Vector2.dist(geom.center, point.geom);
     }
 });
 
 
 export const circleFromCenterRadius = (center, radius) => ({
-    description:"Circle from (center, radius)",
-    input:{
-        center,
-        radius:scalar(radius)
-    },
     ...baseCircle(),
-    update:(input, geom) => {
-        geom.center.copy(input.center.geom);
-        geom.radius = input.radius.value;
+    description:"Circle from (center, radius)",
+    input:{center, radius:scalar(radius)},
+    update:({geom}) => {
+        geom.center.copy(center.geom);
+        geom.radius = radius.value;
     }
 });
 

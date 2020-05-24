@@ -39,63 +39,32 @@ export function segment(...params){
 }
 
 
-export function segmentFromPoints(p1, p2){
-  const segment = baseSegment();
-  Object.assign(
-    segment,
-    {
-      construction:new Construction({
-        description:"segment from points",
-        input:{p1, p2},
-        output:segment,
-        update : function(input, output){
-          const s = output.geom;
-          s.p1.copy(input.p1.geom);
-          s.p2.copy(input.p2.geom);
-        }
-      })
+export const segmentFromPoints = (p1, p2) => ({
+    ...baseSegment(),
+    description:"segment from points",
+    input:{p1, p2},
+    update : ({geom}) => {
+        geom.p1.copy(p1.geom);
+        geom.p2.copy(p2.geom);
     }
-  );
-  return segment;
-}
+});
 
-export function segmentFromVector(vector){
-  const segment = baseSegment();
-  Object.assign(
-    segment,
-    {
-      construction:new Construction({
-        description:"segment from vector",
-        input:{vector},
-        output:segment,
-        update : function(input, output){
-          const s = output.geom;
-          s.p1.copy(input.vector.p1.geom);
-          s.p2.copy(input.vector.p2.geom);
-        }
-      })
+export const segmentFromVector = (vector) => ({
+    ...baseSegment(),
+    description:"segment from vector",
+    input:{vector},
+    update : ({geom}) => {
+       geom.p1.copy(vector.p1.geom);
+       geom.p2.copy(vector.p2.geom);
     }
-  );
-  return segment;
-}
+});
 
-export function segmentFromPointVector(point, vector){
-  const segment = baseSegment();
-  Object.assign(
-    segment,
-    {
-      construction:new Construction({
-        description:"segment from point vector",
-        input:{point, vector},
-        output:segment,
-        update : function(input, output){
-          const s = output.geom;
-          const p = input.point.geom;
-          s.copy(p);
-          s.copy(p).add(input.vector.geom);
-        }
-      })
+export const segmentFromPointVector = (point, vector) => ({
+    ...baseSegment(),
+    description:"segment from point vector",
+    input:{point, vector},
+    update : ({geom}) => {
+        geom.copy(point.geom);
+        geom.copy(point.geom).add(vector.geom);
     }
-  );
-  return segment;
-}
+});

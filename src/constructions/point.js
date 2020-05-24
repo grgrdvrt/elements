@@ -25,14 +25,14 @@ export function basePoint(){
         type : pointType,
         style : new Style({fill:"black"}),
         drawingFunc : drawPoint,
-        output : new maths.Vector2(),
+        geom : new maths.Vector2(),
     };
 }
 
 
 export function point(x, y){
     const pt = basePoint();
-    pt.output.set(x, y);
+    pt.geom.set(x, y);
     pt.construction = defaultConstruction;
     return pt;
 }
@@ -49,8 +49,8 @@ export const middle = (segment) => ({
     description:"segment middle",
     ...basePoint(),
     input:{segment},
-    update : function(input, output){
-        output.lerp(input.segment.output.p1, input.segment.output.p2, 0.5);
+    update : ({input, geom}) => {
+        geom.lerp(input.segment.geom.p1, input.segment.geom.p2, 0.5);
     }
 });
 
@@ -59,10 +59,10 @@ export const pointOnPerpendicular = (line, point) => ({
     description:"point on perpendicular",
     ...basePoint(),
     input:{line, point},
-    update : function(input, output){
-        const pt = input.point.output;
-        const v = input.line.output.vector;
-        output.set(pt.x - v.y, pt.y + v.y);
+    update : ({input, geom}) => {
+        const pt = input.point.geom;
+        const v = input.line.geom.vector;
+        geom.set(pt.x - v.y, pt.y + v.y);
     }
 });
 
@@ -76,12 +76,12 @@ export const barycenter = (pts, weights) => {
         ...basePoint(),
         input:{pts, weights},
         helpers:{},
-        update : function(input, output){
-            output.set(0, 0);
+        update : ({input, geom}) => {
+            geom.set(0, 0);
             input.pts.forEach((pt, i) => {
-                output.add(tmp.copy(pt.output).multiplyScalar(weights[i]));
+                geom.add(tmp.copy(pt.geom).multiplyScalar(weights[i]));
             })
-            output.multiplyScalar(1 / weights.reduce((t, w) => t + w, 0));
+            geom.multiplyScalar(1 / weights.reduce((t, w) => t + w, 0));
         }
     };
 };
@@ -95,151 +95,121 @@ export const circumCenter = (p1, p2, p3) => {
         ...basePoint(),
         input:{p1, p2, p3},
         helpers:{l1, l2},
-        update : function(input, output, helpers){
-            maths.linesIntersection(helpers.l1.output, helpers.l2.output, output);
+        update : ({input, geom, helpers}) => {
+            maths.linesIntersection(helpers.l1.geom, helpers.l2.geom, geom);
         }
     };
 };
 
 
 export const lineCircleIntersections = (line, circle) => {
-    const construction = {
+    return {
         description:"line circle intersections",
         input:{line, circle},
-        output : [basePoint(), basePoint()],//FIXME
-        update : function(input, output){
-            maths.lineCircleIntersection(input.line.output, input.circle.output, output[0].output, output[1].output);
+        output : [basePoint(), basePoint()],
+        update : ({input, output}) => {
+            maths.lineCircleIntersection(input.line.geom, input.circle.geom, output[0].geom, output[1].geom);
         }
     };
-    return [
-        {...basePoint(), construction},
-        {...basePoint(), construction},
-    ]
 };
 
 
-export function circlesIntersections(c1, c2){
-    const pts = [basePoint(), basePoint()];
-    const construction = new Construction({
+export const circlesIntersections = (c1, c2) => {
+    const pts = [];
+    return {
         description:"circles intersections",
         input:{c1, c2},
-        output:pts,
-        update : function(input, output){
-            maths.circlesIntersections(input.c1.output, input.c2.output, output[0].output, output[1].output);
+        output:[
+            basePoint(), basePoint()
+        ],
+        update : ({input, output}) => {
+            maths.circlesIntersections(input.c1.geom, input.c2.geom, output[0].geom, output[1].geom);
         }
-    });
-    pts[0].construction = pts[1].construction = construction;
-    return pts;
+    };
 }
 
 
 export function linesIntersection(l1, l2){
     const pt = basePoint();
-    pt.construction = new Construction({
+    return {
+        ...pt,
         description:"lines intersection",
         input:{l1, l2},
-        output:pt,
-        update : function(input, output){
-            maths.linesIntersection(input.l1.output, input.l2.output, output.output);
+        update : ({input, geom}) => {
+            maths.linesIntersection(input.l1.geom, input.l2.geom, geom);
         }
-    });
-    return pt;
+    };
 }
+
+export const pointOnLine = (line, position) => {
+    const pt = basePoint();
+    pt.geom.copy(position);
+    return {
+        ...pt,
+        description:"point on line",
+        input:{line},
+        update : ({input, geom}) => {
+            maths.projectVectorOnLine(geom, input.line.geom);
+        }
+    };
+};
+
+export const pointOnCircle = (circle, position) => {
+    const pt = basePoint();
+    pt.geom.copy(position);
+    return {
+        ...pt,
+        description:"point on circle",
+        input:{circle},
+        update : ({input, geom}) => {
+            maths.projectVectorOnCircle(geom, input.circle.geom, geom);
+        }
+    };
+}
+
+
+export const mouse = (stage, mouse) => ({
+    ...basePoint(),
+    selectable : false,
+    description:"mouse",
+    input:{},
+    update : ({input, geom}) => {
+        geom.copy(mouse.position);
+    }
+});
+
+export const pointCentralSymmetry = (point, center) => ({
+        ...basePoint(),
+        description:"point central symmetry",
+        input:{point, center},
+        update : ({input, geom}) => {
+            maths.pointCentralSymmetry(geom.copy(input.point.geom), center);
+        }
+});
+
+export const pointAxialSymmetry = (point, axis) => ({
+    ...basePoint(),
+    description:"point axial symmetry",
+    input:{point, axis},
+    update : ({input, geom}) => {
+        maths.pointaxialSymmetry(geom.copy(input.point.geom), axis);
+    }
+});
+
 
 /**
  * position:Vector2 only used at creation
  */
 export function pointOnObject(obj, position){
     switch(obj.type){
-    case pointType:
-        return obj;
-    case circleType:
-        return pointOnCircle(obj, position);
-    case lineType:
-        return pointOnLine(obj, position);
-    default :
-        throw new Error("no implementation for type : " + obj.type);
-        break;
+        case pointType:
+            return obj;
+        case circleType:
+            return pointOnCircle(obj, position);
+        case lineType:
+            return pointOnLine(obj, position);
+        default :
+            throw new Error("no implementation for type : " + obj.type);
+            break;
     }
-}
-
-export const pointOnLine = (line, position) => {
-    const pt = basePoint();
-    pt.output.copy(position);
-    return {
-        ...pt,
-        description:"point on line",
-        input:{line},
-        output:pt,
-        update : function(input, output){
-            maths.projectVectorOnLine(output, input.line.output);
-        }
-    };
-};
-
-export function pointOnCircle(circle, position){
-    const pt = basePoint();
-    pt.output.copy(position);
-    pt.construction = new Construction({
-        description:"point on circle",
-        input:{circle},
-        output:pt,
-        update : function(input, output){
-            maths.projectVectorOnCircle(output.output, input.circle.output, output.output);
-        }
-    });
-    return pt;
-}
-
-
-export function mouse(stage, mouse){
-    const pt = basePoint();
-    Object.assign(
-        pt,
-        {
-            selectable : false,
-            construction : new Construction({
-                description:"mouse",
-                input:{},
-                output:pt,
-                update : function(input, output){
-                    output.output.copy(mouse.position);
-                }
-            })
-        });
-    return pt;
-}
-
-export function pointCentralSymmetry(point, center){
-    const pt = basePoint();
-    Object.assign(
-        pt,
-        {
-            construction : new Construction({
-                description:"point central symmetry",
-                input:{point, center},
-                output:pt,
-                update : function(input, output){
-                    maths.pointCentralSymmetry(output.output.copy(input.point.output), center);
-                }
-            })
-        });
-    return pt;
-}
-
-export function pointAxialSymmetry(point, axis){
-    const pt = basePoint();
-    Object.assign(
-        pt,
-        {
-            construction : new Construction({
-                description:"point axial symmetry",
-                input:{point, axis},
-                output:pt,
-                update : function(input, output){
-                    maths.pointaxialSymmetry(output.output.copy(input.point.output), axis);
-                }
-            })
-        });
-    return pt;
 }
