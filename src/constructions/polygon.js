@@ -38,8 +38,8 @@ export const regularPolygon = (center, vertex, sides) => {
         ...basePolygon(pts),
         description:"regular polygon",
         input : {center, vertex, sides},
-        update : ({input, geom}) => {
-            const diff = input.vertex.geom.clone().sub(input.center.geom);
+        update : ({geom}) => {
+            const diff = vertex.geom.clone().sub(center.geom);
             const radius = diff.getLength();
             const angBegin = Math.atan2(diff.y, diff.x);
             geom.forEach((pt, i) => {
@@ -47,7 +47,7 @@ export const regularPolygon = (center, vertex, sides) => {
                 const ang = angBegin + i * 2 * Math.PI / sides;
                 pt.x = Math.cos(ang);
                 pt.y = Math.sin(ang);
-                pt.multiplyScalar(radius).add(input.center.geom)
+                pt.multiplyScalar(radius).add(center.geom)
             });
         }
     }
