@@ -48,13 +48,13 @@
           return;
         }
         if (object.input) {
-          for (let name in object.input) {
-            updateObject(object.input[name], timeStamp);
+          for (let key in object.input) {
+            updateObject(object.input[key], timeStamp);
           }
         }
         if (object.helpers) {
-          for (let name in object.helpers) {
-            updateObject(object.helpers[name], timeStamp);
+          for (let key in object.helpers) {
+            updateObject(object.helpers[key], timeStamp);
           }
         }
         if (object.update) {
@@ -790,9 +790,9 @@
           p1: p12,
           p2: p22
         },
-        update({input, geom}) {
-          geom.point.copy(input.p1.geom);
-          geom.vector.copy(input.p2.geom).sub(p12.geom);
+        update({geom}) {
+          geom.point.copy(p12.geom);
+          geom.vector.copy(p22.geom).sub(p12.geom);
         }
       }));
       const lineFromPointVector = makeTypedFunction([pointType, vectorType], (point7, vector3) => ({
@@ -802,8 +802,8 @@
           point: point7,
           vector: vector3
         },
-        update({input, geom}) {
-          geom.set(input.point.geom, input.vector.geom);
+        update({geom}) {
+          geom.set(point7.geom, vector3.geom);
         }
       }));
       const perpendicular = makeTypedFunction([lineType, pointType], (line5, point7) => {
@@ -1832,13 +1832,13 @@
         }
         onCenter(center) {
           this.center = center;
-          this.pointTemp = index.mouse(this.stage, this.mouse);
-          this.circle = index.circle(this.center, this.pointTemp);
-          this.circle.selectable = false;
+          this.tempPoint = index.mouse(this.stage, this.mouse);
+          this.tempCircle = index.circle(this.center, this.tempPoint);
+          this.tempCircle.selectable = false;
           this.center.selectable = false;
-          this.pointTemp.selectable = false;
-          this.stage.add(this.circle);
-          this.stage.add(this.pointTemp);
+          this.tempPoint.selectable = false;
+          this.stage.add(this.tempCircle);
+          this.stage.add(this.tempPoint);
           this.centerCommand.completed.remove(this.onCenter, this);
           this.centerCommand.disable();
           this.pointCommand = new SelectOrCreatePoint2(this.stage, this.mouse);
@@ -1850,17 +1850,17 @@
           this.point = point7;
           this.pointCommand.completed.remove(this.onCenter, this);
           this.pointCommand.disable();
-          this.circle.input.point = this.point;
-          this.circle.selectable = true;
+          this.circle = index.circle(this.center, this.point);
           this.center.selectable = true;
           this.point.selectable = true;
-          this.stage.remove(this.pointTemp);
+          this.stage.remove(this.tempPoint);
+          this.stage.remove(this.tempCircle);
           this.completed.dispatch(this.circle);
         }
         cancel() {
           if (this.center) {
             this.centerCommand.undo();
-            this.stage.remove(this.circle);
+            this.stage.remove(this.tempCircle);
             this.pointCommand.completed.remove(this.onCenter, this);
             this.pointCommand.disable();
           }
@@ -1873,7 +1873,7 @@
         redo() {
           this.centerCommand.redo();
           this.pointCommand.redo();
-          this.stage.add(this.line);
+          this.stage.add(this.circle);
         }
       }
 
@@ -1899,13 +1899,13 @@
         }
         onP1(p12) {
           this.p1 = p12;
-          this.p2Temp = index.mouse(this.stage, this.mouse);
-          this.line = index.line(this.p1, this.p2Temp);
-          this.line.selectable = false;
+          this.tempP2 = index.mouse(this.stage, this.mouse);
+          this.tempLine = index.line(this.p1, this.tempP2);
+          this.tempLine.selectable = false;
           this.p1.selectable = false;
-          this.p2Temp.selectable = false;
-          this.stage.add(this.line);
-          this.stage.add(this.p2Temp);
+          this.tempP2.selectable = false;
+          this.stage.add(this.tempLine);
+          this.stage.add(this.tempP2);
           this.p1Command.completed.remove(this.onP1, this);
           this.p1Command.disable();
           this.p2Command = new SelectOrCreatePoint2(this.stage, this.mouse);
@@ -1915,20 +1915,20 @@
         }
         onP2(p22) {
           this.p2 = p22;
-          console.log(this.p2);
           this.p2Command.completed.remove(this.onP2, this);
           this.p2Command.disable();
-          this.line.input.p2 = this.p2;
-          this.line.selectable = true;
+          this.line = index.line(this.p1, this.p2);
+          this.stage.add(this.line);
           this.p1.selectable = true;
           this.p2.selectable = true;
-          this.stage.remove(this.p2Temp);
+          this.stage.remove(this.tempP2);
+          this.stage.remove(this.tempLine);
           this.completed.dispatch(this.line);
         }
         cancel() {
           if (this.p1) {
             this.p1Command.undo();
-            this.stage.remove(this.line);
+            this.stage.remove(this.tempLine);
             this.p2Command.completed.remove(this.onP1, this);
             this.p2Command.disable();
           }
@@ -1972,7 +1972,6 @@
             const isDraggable = !item.input;
             return isPoint && isDraggable;
           });
-          console.log(points);
           points.sort((a, b) => Math.abs(b.distance) - Math.abs(a.distance));
           if (points.length > 0) {
             this.startDrag(points[0].object);
@@ -2146,6 +2145,7 @@
       class ToolsSelector2 {
         constructor(tools) {
           this.domElement = document.createElement("ul");
+          this.domElement.classList.add("toolsSelector");
           this.tools = tools;
           this.onClickBind = this.onClick.bind(this);
           this.setCurrentTool(this.tools[0]);
@@ -2158,9 +2158,10 @@
         }
         buildList() {
           this.tools.forEach((tool, i) => {
-            let container = document.createElement("li");
+            const container = document.createElement("li");
+            container.classList.add("tool");
             this.domElement.appendChild(container);
-            let element = document.createElement("button");
+            const element = document.createElement("button");
             element.innerHTML = tool.description;
             element.dataset.id = i;
             container.appendChild(element);

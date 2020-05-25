@@ -29,7 +29,7 @@ export default class CompleteGui{
 
         this.updateCallback = props.updateCallback;
 
-        this.window = maths.Rectangle.makeArea(-1.2, 1.2, 1.2, -1.2)
+        this.window = maths.Rectangle.makeArea(-1.2, 1.2, 1.2, -1.2);
         this.stage = new Stage(this.canvas, {window:this.window.clone()});
 
         this.mouseController = new Mouse(this.stage);

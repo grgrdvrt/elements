@@ -36,7 +36,6 @@ export class DragPoint{
                 const isDraggable = !item.input;
                 return isPoint && isDraggable;
             });
-        console.log(points);
         points.sort((a, b) => Math.abs(b.distance) - Math.abs(a.distance));
         if(points.length > 0){
             this.startDrag(points[0].object);
