@@ -29,7 +29,17 @@ export class Stage {
             if(this.items.indexOf(item) !== -1){
                 return;
             }
-            this.items.push(item);
+            if(item.output){
+                if(Array.isArray(item.output)){
+                    this.add(...item.output);
+                }
+                else{
+                    this.add(...Object.values(item.output));
+                }
+            }
+            else{
+                this.items.push(item);
+            }
         });
     }
 

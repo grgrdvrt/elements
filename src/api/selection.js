@@ -24,7 +24,7 @@ export function selectInCircle(objects, circle){
       let distance;
       switch(object.type){
         case pointType:
-            distance = maths.vectorsDistance(object.geom, circle.center);
+            distance = maths.vectorsDistance(circle.center, object.geom);
             break;
         case lineType:
             distance = maths.vectorLineDistance(circle.center, object.geom);

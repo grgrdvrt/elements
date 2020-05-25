@@ -49,11 +49,13 @@ export class CircleCenterPoint{
         this.pointCommand.completed.remove(this.onCenter, this);
         this.pointCommand.disable();
 
-        this.circle = api.circle(this.center, this.point);
-        this.center.selectable = true;
-        this.point.selectable = true;
         this.stage.remove(this.tempPoint);
         this.stage.remove(this.tempCircle);
+
+        this.circle = api.circle(this.center, this.point);
+        this.stage.add(this.circle);
+        this.center.selectable = true;
+        this.point.selectable = true;
 
         this.completed.dispatch(this.circle);
     }

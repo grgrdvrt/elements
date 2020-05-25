@@ -14,6 +14,7 @@ import {
     scalarType,
     segmentType,
     vectorType,
+    listType,
 
     makeTypedFunction
 } from "../api/types";
@@ -64,7 +65,7 @@ export const pointOnPerpendicular = makeTypedFunction(
 );
 
 export const barycenter = makeTypedFunction(
-    [],
+    [listType(pointType), listType(scalarType)],
     (pts, weights) => {
         if(weights === undefined){
             weights = pts.map(() => 1);
@@ -123,17 +124,21 @@ export const lineCircleIntersections = makeTypedFunction(
 export const circlesIntersections = makeTypedFunction(
     [circleType, circleType],
     (c1, c2) => {
-        const pts = [];
-        return {
+        const result = {
             description:"circles intersections",
             input:{c1, c2},
-            output:[
-                basePoint(), basePoint()
-            ],
+            type : listType(pointType),
             update({output}){
                 maths.circlesIntersections(c1.geom, c2.geom, output[0].geom, output[1].geom);
             }
         };
+        result.output = [basePoint(), basePoint()].map(p => ({
+            ...p,
+            description:"circles intersection",
+            input:{c1, c2},
+            helpers:{result}
+        }));
+        return result;
     }
 );
 

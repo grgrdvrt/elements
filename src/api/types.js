@@ -5,12 +5,20 @@ export const polygonType = "polygon";
 export const scalarType = "scalar";
 export const segmentType = "segment";
 export const vectorType = "vector";
+// export const listType = type => `list(${type})`;
+export const listType = type => `list`;
 
 export function makeTypedFunction(types, func){
     const typedFunc = (...args) => func(...spreadTypedArgs(args, types));
     typedFunc.types = types;
     typedFunc.baseFunc = func;
     return typedFunc;
+}
+
+function matchType(type, value){
+    return (type === scalarType && value) ||
+        (type === listType() && Array.isArray(value)) ||
+        value.type === type;
 }
 
 function spreadTypedArgs(args, types){
@@ -23,7 +31,7 @@ function spreadTypedArgs(args, types){
         let nextParam = undefined;
         for(let i = 0; i < params.length; i++){
             const param = params[i];
-            if(param.type === type){
+            if(matchType(type, param)){
                 nextParam = param;
                 params.splice(i, 1);
                 break;
@@ -55,8 +63,8 @@ export function makeDispatch(...funcs){
         }
         else{
             console.error(`no match found for args ${args}`);
-            return undefined
+            return undefined;
         }
-    }
+    };
 }
 

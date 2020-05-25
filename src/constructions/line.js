@@ -62,7 +62,16 @@ export const lineFromPointVector = makeTypedFunction(
 export const perpendicular = makeTypedFunction(
     [lineType, pointType],
     (line, point) => {
-        return lineFromPoints(point, pointOnPerpendicular(line, point));
+        return {
+            ...baseLine(),
+            description:"line from (point, vector)",
+            input:{line, point},
+            update({geom}){
+                geom.point.copy(point.geom);
+                const lv = line.geom.vector;
+                geom.vector.set(-lv.y, lv.x);
+            }
+        };
     }
 );
 

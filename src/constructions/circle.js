@@ -71,7 +71,7 @@ export const circumCircle = makeTypedFunction(
             geom.radius = maths.Vector2.dist(helpers.center.geom, p1.geom);
         }
     })
-)
+);
 
 
 export const circleFromCenterPoint = makeTypedFunction(
@@ -106,4 +106,4 @@ export const circle = makeDispatch(
     circumCircle,
     circleFromCenterPoint,
     circleFromCenterRadius,
-)
+);

@@ -49,12 +49,13 @@ export class LinePointPoint{
         this.p2Command.completed.remove(this.onP2, this);
         this.p2Command.disable();
 
+        this.stage.remove(this.tempP2);
+        this.stage.remove(this.tempLine);
+
         this.line = api.line(this.p1, this.p2);
         this.stage.add(this.line);
         this.p1.selectable = true;
         this.p2.selectable = true;
-        this.stage.remove(this.tempP2);
-        this.stage.remove(this.tempLine);
 
         this.completed.dispatch(this.line);
     }

@@ -6,19 +6,20 @@ document.body.appendChild(gui.domElement);
 
 const stage = gui.stage;
 
-// let t1 = gui.ranPt();
-// let t2 = gui.ranPt();
-// let t3 = gui.ranPt();
+/** circum circle **/
+// const t1 = gui.ranPt();
+// const t2 = gui.ranPt();
+// const t3 = gui.ranPt();
 // stage.add(t1, t2, t3);
 
-// let s1 = api.segment(t1, t2);
-// let s2 = api.segment(t1, t3);
-// let s3 = api.segment(t2, t3);
+// const s1 = api.segment(t1, t2);
+// const s2 = api.segment(t1, t3);
+// const s3 = api.segment(t2, t3);
 // stage.add(s1, s2, s3);
 
-// let m1 = api.segmentBissector(s1);
-// let m2 = api.segmentBissector(s2);
-// let m3 = api.segmentBissector(s3);
+// const m1 = api.segmentBissector(s1);
+// const m2 = api.segmentBissector(s2);
+// const m3 = api.segmentBissector(s3);
 // stage.add(m1, m2, m3);
 
 // stage.add(
@@ -28,14 +29,14 @@ const stage = gui.stage;
 // );
 
 // stage.add(api.linesIntersection(m1, m3));
-
-// let c = api.circumCircle(t1, t2, t3);
-// stage.add(c);
+// stage.add(api.circle(t1, t2, t3));
 
 
-// let c1 = api.circle(gui.ranPt(), gui.ranPt());
-// let inters = api.circlesIntersections(c1, c);
-// stage.add(c1, c, inters);
+
+const c1 = api.circle(gui.ranPt(), gui.ranPt());
+const c2 = api.circle(gui.ranPt(), gui.ranPt());
+let inters = api.circlesIntersections(c1, c2);
+stage.add(c1, c2, inters);
 
 // let pts = [];
 // let nPts = 30;
@@ -56,36 +57,41 @@ const stage = gui.stage;
 
 // stage.add(f(intersections).map(inter => api.segment(inter[0], inter[1])));
 
+/** frame**/
 // let origin = api.point(0, 0);
 // stage.add(api.vector(origin, api.point(1, 0)));
 // stage.add(api.vector(origin, api.point(0, 1)));
 
 
-let p1 = gui.ranPt();
-let p2 = gui.ranPt();
-let ci = api.circle(p1, p2);
-stage.add(p1, p2, ci);
+/** Circle point point**/
+// let p1 = gui.ranPt();
+// let p2 = gui.ranPt();
+// let ci = api.circle(p1, p2);
+// stage.add(p1, p2, ci);
 
-let pa = gui.ranPt();
-let pb = gui.ranPt();
-let pc = gui.ranPt();
-let pd = gui.ranPt();
+/**VARIGNON**/
+// let pa = gui.ranPt();
+// let pb = gui.ranPt();
+// let pc = gui.ranPt();
+// let pd = gui.ranPt();
 
-let sa = api.segment(pa, pb);
-let sb = api.segment(pb, pc);
-let sc = api.segment(pc, pd);
-let sd = api.segment(pd, pa);
+// let sa = api.segment(pa, pb);
+// let sb = api.segment(pb, pc);
+// let sc = api.segment(pc, pd);
+// let sd = api.segment(pd, pa);
 
-let ma = api.middle(sa);
-let mb = api.middle(sb);
-let mc = api.middle(sc);
-let md = api.middle(sd);
+// let ma = api.middle(sa);
+// let mb = api.middle(sb);
+// let mc = api.middle(sc);
+// let md = api.middle(sd);
 
-stage.add(pa, pb, pc, pd);
-stage.add(ma, mb, mc, md);
-stage.add(sa, sb, sc, sd);
+// stage.add(pa, pb, pc, pd);
+// stage.add(ma, mb, mc, md);
+// stage.add(sa, sb, sc, sd);
 
-stage.add(api.polygon(ma, mb, mc, md));
+// stage.add(api.polygon(ma, mb, mc, md));
+
+
 // gui.start(timeStamp => {
 //     pts.forEach((p, i) => p.geom.y = 0.1 * w.height * Math.cos(0.5 * i + 0.03 * timeStamp));
 // });
