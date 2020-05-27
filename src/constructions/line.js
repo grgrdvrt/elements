@@ -18,9 +18,11 @@ import {
     makeTypedFunction,
 } from "../api/types";
 
+let id = 0;
 export function baseLine(){
     return {
         type:lineType,
+        name : `Line_${id++}`,
         style : new Style({stroke:"black"}),
         drawingFunc : drawLine,
         output:null,

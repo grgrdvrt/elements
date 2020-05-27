@@ -10,5 +10,4 @@ export * from "../constructions/functionGraph";
 export * from "../constructions/scalar";
 export * from "../constructions/vector";
 export * from "../constructions/polygon";
-
-
+export * from "../constructions/functionGraph";

@@ -14,14 +14,17 @@ import {
     scalarType,
     segmentType,
     vectorType,
+    untyped,
     listType,
 
     makeTypedFunction
 } from "../api/types";
 
+let id = 0;
 export function basePoint(){
     return {
         type : pointType,
+        name : `Point_${id++}`,
         style : new Style({fill:"black"}),
         drawingFunc : drawPoint,
         geom : new maths.Vector2(),
@@ -159,7 +162,7 @@ export const linesIntersection = makeTypedFunction(
 );
 
 export const pointOnLine = makeTypedFunction(
-    [lineType],
+    [lineType, untyped],
     (line, position) => {
         const pt = basePoint();
         pt.geom.copy(position);
@@ -175,7 +178,7 @@ export const pointOnLine = makeTypedFunction(
 );
 
 export const pointOnCircle = makeTypedFunction(
-    [circleType],
+    [circleType, untyped],
     (circle, position) => {
         const pt = basePoint();
         pt.geom.copy(position);
@@ -237,14 +240,14 @@ export function point(x, y){
  */
 export function pointOnObject(obj, position){
     switch(obj.type){
-    case pointType:
-        return obj;
-    case circleType:
-        return pointOnCircle(obj, position);
-    case lineType:
-        return pointOnLine(obj, position);
-    default :
-        throw new Error("no implementation for type : " + obj.type);
-        break;
+        case pointType:
+            return obj;
+        case circleType:
+            return pointOnCircle(obj, position);
+        case lineType:
+            return pointOnLine(obj, position);
+        default :
+            throw new Error("no implementation for type : " + obj.type);
+            break;
     }
 }

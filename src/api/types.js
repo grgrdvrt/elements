@@ -5,6 +5,8 @@ export const polygonType = "polygon";
 export const scalarType = "scalar";
 export const segmentType = "segment";
 export const vectorType = "vector";
+export const funcType = "function";
+export const untyped = "untyped";
 // export const listType = type => `list(${type})`;
 export const listType = type => `list`;
 
@@ -18,6 +20,7 @@ export function makeTypedFunction(types, func){
 function matchType(type, value){
     return (type === scalarType && value) ||
         (type === listType() && Array.isArray(value)) ||
+        (type === untyped && !value.type) ||
         value.type === type;
 }
 

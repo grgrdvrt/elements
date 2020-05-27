@@ -5,6 +5,7 @@ const gui = new Gui();
 document.body.appendChild(gui.domElement);
 
 const stage = gui.stage;
+gui.window.setCorners(-10, 10, 10, -10);
 
 /** circum circle **/
 // const t1 = gui.ranPt();
@@ -31,12 +32,15 @@ const stage = gui.stage;
 // stage.add(api.linesIntersection(m1, m3));
 // stage.add(api.circle(t1, t2, t3));
 
+// stage.add(api.functionGraph(x => Math.cos(x)));
+// stage.add(api.functionGraph(x => Math.tan(x)));
+// stage.add(api.functionGraph(x => 1 / x));
 
 
-const c1 = api.circle(gui.ranPt(), gui.ranPt());
-const c2 = api.circle(gui.ranPt(), gui.ranPt());
-let inters = api.circlesIntersections(c1, c2);
-stage.add(c1, c2, inters);
+// const c1 = api.circle(gui.ranPt(), gui.ranPt());
+// const c2 = api.circle(gui.ranPt(), gui.ranPt());
+// let inters = api.circlesIntersections(c1, c2);
+// stage.add(c1, c2, inters);
 
 // let pts = [];
 // let nPts = 30;
@@ -58,9 +62,9 @@ stage.add(c1, c2, inters);
 // stage.add(f(intersections).map(inter => api.segment(inter[0], inter[1])));
 
 /** frame**/
-// let origin = api.point(0, 0);
-// stage.add(api.vector(origin, api.point(1, 0)));
-// stage.add(api.vector(origin, api.point(0, 1)));
+let origin = api.point(0, 0);
+stage.add(api.vector(origin, api.point(1, 0)));
+stage.add(api.vector(origin, api.point(0, 1)));
 
 
 /** Circle point point**/

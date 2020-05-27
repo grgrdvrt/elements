@@ -13,13 +13,15 @@ import {
     vectorType,
 } from "../api/types";
 
+let id = 0;
 export function baseVector(){
-  return {
-    type : vectorType,
-    style : new Style({stroke:"black"}),
-    drawingFunc : drawVector,
-    geom : new maths.Segment()
-  };
+    return {
+        type : vectorType,
+        name : `Vector_${id++}`,
+        style : new Style({stroke:"black"}),
+        drawingFunc : drawVector,
+        geom : new maths.Segment()
+    };
 }
 
 export const vector = (p1, p2) => ({
@@ -27,7 +29,7 @@ export const vector = (p1, p2) => ({
     description:"Vector point point",
     input:{p1, p2},
     update({geom}){
-      geom.p1.copy(p1.geom);
-      geom.p2.copy(p2.geom);
+        geom.p1.copy(p1.geom);
+        geom.p2.copy(p2.geom);
     }
 });

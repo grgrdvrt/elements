@@ -12,13 +12,15 @@ import {
     vectorType,
 } from "../api/types";
 
+let id = 0;
 export function baseSegment(){
-  return {
-    type : segmentType,
-    style : new Style({stroke:"black"}),
-    drawingFunc : drawSegment,
-    geom : new maths.Segment()
-  };
+    return {
+        type : segmentType,
+        name : `Segment_${id++}`,
+        style : new Style({stroke:"black"}),
+        drawingFunc : drawSegment,
+        geom : new maths.Segment()
+    };
 }
 
 
@@ -38,8 +40,8 @@ export const segmentFromVector = (vector) => ({
     description:"segment from vector",
     input:{vector},
     update : ({geom}) => {
-       geom.p1.copy(vector.p1.geom);
-       geom.p2.copy(vector.p2.geom);
+        geom.p1.copy(vector.p1.geom);
+        geom.p2.copy(vector.p2.geom);
     }
 });
 

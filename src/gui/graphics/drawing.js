@@ -1,4 +1,7 @@
-import {Vector2} from "../../maths";
+import {
+    Vector2,
+    lerp
+} from "../../maths";
 
 export function drawPoint(stage, point){
     const radius = 5;
@@ -190,6 +193,50 @@ export function drawPolygon(stage, polygon){
     if(style.fill!== undefined){
         ctx.fillStyle = style.fill.toString();
         ctx.fill();
+    }
+    ctx.restore();
+}
+
+
+export function drawFuncGraph(stage, func){
+    const ctx = stage.ctx;
+    ctx.beginPath();
+    const w = stage.window;
+    ctx.save();
+    ctx.translate(stage.translation.x, stage.translation.y);
+    ctx.scale(stage.scale.x, stage.scale.y);
+    let prev = {x:w.x, y:func.input.func(w.x)};
+    let isPrevVisible = w.contains(prev.x, prev.y);
+    ctx.moveTo(prev.x, prev.y);
+    const nSteps = stage.scale.x * w.width;
+    for(let i = 0; i < nSteps; i++){
+        const x = w.x + lerp(0, w.width, i / nSteps);
+        const val = func.input.func(x);
+        const isValVisible = w.contains(x, val);
+        if(isPrevVisible){
+            ctx.lineTo(x, val);
+            isPrevVisible = isValVisible;
+        }
+        else if(isValVisible){
+            ctx.moveTo(prev.x, prev.y);
+            ctx.lineTo(x, val);
+            isPrevVisible = true;
+        }
+        else{
+            isPrevVisible = false;
+        }
+        prev = {x:x, y:val};
+    }
+    ctx.restore();
+
+    const style = func.style;
+    ctx.save();
+    if(style.stroke !== undefined){
+        ctx.strokeStyle = style.stroke.toString();
+        if(style.dash !== undefined){
+            ctx.setLineDash(style.dash);
+        }
+        ctx.stroke();
     }
     ctx.restore();
 }

@@ -25,6 +25,15 @@ export class Rectangle{
         return this;
     }
 
+    contains(x, y){
+        const xMin = Math.min(this.x, this.x + this.width);
+        const xMax = Math.max(this.x, this.x + this.width);
+        const yMin = Math.min(this.y, this.y + this.height);
+        const yMax = Math.max(this.y, this.y + this.height);
+        return x >= xMin && x <= xMax &&
+               y >= yMin && y <= yMax;
+    }
+
     copy(rect){
         this.x = rect.x;
         this.y = rect.y;

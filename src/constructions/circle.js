@@ -21,9 +21,11 @@ import {
     makeDispatch
 } from "../api/types";
 
+let id = 0;
 export function baseCircle(){
     return {
         type : circleType,
+        name : `Circle_${id++}`,
         style : new Style({stroke : "black"}),
         drawingFunc : drawCircle,
         geom : new maths.Circle(),

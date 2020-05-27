@@ -71,23 +71,25 @@
       const scalarType = "scalar";
       const segmentType = "segment";
       const vectorType = "vector";
+      const funcType = "function";
+      const untyped = "untyped";
       const listType = (type) => `list`;
-      function makeTypedFunction(types11, func) {
-        const typedFunc = (...args) => func(...spreadTypedArgs(args, types11));
-        typedFunc.types = types11;
+      function makeTypedFunction(types12, func) {
+        const typedFunc = (...args) => func(...spreadTypedArgs(args, types12));
+        typedFunc.types = types12;
         typedFunc.baseFunc = func;
         return typedFunc;
       }
       function matchType(type, value) {
-        return type === scalarType && value || type === listType() && Array.isArray(value) || value.type === type;
+        return type === scalarType && value || type === listType() && Array.isArray(value) || type === untyped && !value.type || value.type === type;
       }
-      function spreadTypedArgs(args, types11) {
+      function spreadTypedArgs(args, types12) {
         const params = Array.from(args);
         const result = [];
-        if (types11.length !== params.length) {
+        if (types12.length !== params.length) {
           return void 0;
         }
-        for (let type of types11) {
+        for (let type of types12) {
           let nextParam = void 0;
           for (let i = 0; i < params.length; i++) {
             const param = params[i];
@@ -327,9 +329,9 @@
 
       // src/maths/Line.js
       class Line3 {
-        constructor(point7 = new index2.Vector2(), vector3 = new index2.Vector2()) {
-          this.point = point7;
-          this.vector = vector3;
+        constructor(point9 = new index2.Vector2(), vector4 = new index2.Vector2()) {
+          this.point = point9;
+          this.vector = vector4;
         }
         getYFromX(x) {
           const t = (x - this.point.x) / this.vector.x;
@@ -361,9 +363,9 @@
           this.center = center;
           this.radius = radius;
         }
-        copy(circle6) {
-          this.center.copy(circle6.center);
-          this.radius = circle6.radius;
+        copy(circle5) {
+          this.center.copy(circle5.center);
+          this.radius = circle5.radius;
         }
       }
 
@@ -389,6 +391,13 @@
           this.height = yMax - yMin;
           return this;
         }
+        contains(x, y) {
+          const xMin = Math.min(this.x, this.x + this.width);
+          const xMax = Math.max(this.x, this.x + this.width);
+          const yMin = Math.min(this.y, this.y + this.height);
+          const yMax = Math.max(this.y, this.y + this.height);
+          return x >= xMin && x <= xMax && y >= yMin && y <= yMax;
+        }
         copy(rect) {
           this.x = rect.x;
           this.y = rect.y;
@@ -412,39 +421,39 @@
         let t = (yv2 * dxp - xv2 * dyp) / (xv1 * yv2 - xv2 * yv1);
         return l1.getPointAt(t, v);
       }
-      function lineCircleIntersection2(line5, circle6, v1 = new index2.Vector2(), v2 = new index2.Vector2()) {
+      function lineCircleIntersection2(line5, circle5, v1 = new index2.Vector2(), v2 = new index2.Vector2()) {
         let v = line5.vector;
         let p = line5.point;
-        let c = circle6.center;
-        let r = circle6.radius;
+        let c = circle5.center;
+        let r = circle5.radius;
         let roots = index2.quadraticRoots(v.dot(v), 2 * (p.x * v.x + p.y * v.y - c.x * v.x - c.y * v.y), c.dot(c) + p.dot(p) - 2 * (c.x * p.x + c.y * p.y) - r * r);
         line5.getPointAt(roots.x1, v1);
         line5.getPointAt(roots.x2, v2);
       }
-      function circlesIntersections4(circle1, circle22, v1 = new index2.Vector2(), v2 = new index2.Vector2()) {
-        let c12 = circle1.center;
-        let c22 = circle22.center;
+      function circlesIntersections3(circle1, circle22, v1 = new index2.Vector2(), v2 = new index2.Vector2()) {
+        let c1 = circle1.center;
+        let c2 = circle22.center;
         let r1 = circle1.radius;
         let r2 = circle22.radius;
-        let dx = c22.x - c12.x;
-        let dy = c22.y - c12.y;
-        let ddx = c22.x * c22.x - c12.x * c12.x;
-        let ddy = c22.y * c22.y - c12.y * c12.y;
+        let dx = c2.x - c1.x;
+        let dy = c2.y - c1.y;
+        let ddx = c2.x * c2.x - c1.x * c1.x;
+        let ddy = c2.y * c2.y - c1.y * c1.y;
         let ddr = r1 * r1 - r2 * r2;
         let s1 = dx / dy;
         let s2 = (ddr + ddx + ddy) / dy;
-        let s3 = c12.y - s2 / 2;
+        let s3 = c1.y - s2 / 2;
         let roots, f;
         if (dy === 0) {
           let x = (ddx + ddr) / (2 * dx);
-          let dx2 = c12.x - x;
-          roots = index2.quadraticRoots(1, -2 * c12.y, c12.y * c12.y + dx2 * dx2 - r1 * r1);
+          let dx2 = c1.x - x;
+          roots = index2.quadraticRoots(1, -2 * c1.y, c1.y * c1.y + dx2 * dx2 - r1 * r1);
           f = (v, y) => v.set(x, y);
         } else {
-          roots = index2.quadraticRoots(1 + s1 * s1, 2 * (s1 * s3 - c12.x), s3 * s3 + c12.x * c12.x - r1 * r1);
+          roots = index2.quadraticRoots(1 + s1 * s1, 2 * (s1 * s3 - c1.x), s3 * s3 + c1.x * c1.x - r1 * r1);
           f = (v, x) => v.set(x, s2 / 2 - s1 * x);
         }
-        if (c22.y > c12.y) {
+        if (c2.y > c1.y) {
           let t = roots.x1;
           roots.x1 = roots.x2;
           roots.x2 = t;
@@ -458,19 +467,19 @@
       }
 
       // src/maths/projection.js
-      function projectVectorOnCircle2(vector3, circle6, result = new index2.Vector2()) {
-        result.copy(vector3).sub(circle6.center).setLength(circle6.radius).add(circle6.center);
+      function projectVectorOnCircle2(vector4, circle5, result = new index2.Vector2()) {
+        result.copy(vector4).sub(circle5.center).setLength(circle5.radius).add(circle5.center);
         return result;
       }
-      function projectVectorOnLine2(vector3, line5) {
+      function projectVectorOnLine2(vector4, line5) {
         let ab = line5.vector.getLength();
-        let ac = index2.vectorsDistance(line5.point, vector3);
-        let bc = index2.vectorsDistance(line5.point.clone().add(line5.vector), vector3);
+        let ac = index2.vectorsDistance(line5.point, vector4);
+        let bc = index2.vectorsDistance(line5.point.clone().add(line5.vector), vector4);
         let ai = -(bc * bc - ab * ab - ac * ac) / (2 * ab);
         let result = line5.vector.clone().setLength(ai).add(line5.point);
-        vector3.copy(result);
+        vector4.copy(result);
         result.dispose();
-        return vector3;
+        return vector4;
       }
 
       // src/maths/distance.js
@@ -479,38 +488,38 @@
         let dy = v2.y - v1.y;
         return Math.hypot(dx, dy);
       }
-      function vectorLineDistance2(vector3, line5) {
-        let l2 = new index2.Line(vector3, new index2.Vector2(-line5.vector.y, line5.vector.x));
+      function vectorLineDistance2(vector4, line5) {
+        let l2 = new index2.Line(vector4, new index2.Vector2(-line5.vector.y, line5.vector.x));
         let p = index2.linesIntersection(line5, l2);
-        return vectorsDistance2(vector3, p);
+        return vectorsDistance2(vector4, p);
       }
       function vectorCircleDistance2(v, c) {
         return vectorsDistance2(v, c.center) - c.radius;
       }
-      function circlesDistance(c12, c22) {
-        return vectorsDistance2(c12.center, c22.center) - (c12.radius + c22.radius);
+      function circlesDistance(c1, c2) {
+        return vectorsDistance2(c1.center, c2.center) - (c1.radius + c2.radius);
       }
       function lineCircleDistance(l, c) {
         return vectorLineDistance2(c.center, l) - c.radius;
       }
 
       // src/maths/symmetry.js
-      function pointAxialSymmetry2(point7, axis) {
-        let tmp = point7.clone();
-        pointCentralSymmetry3(point7, index2.projectVectorOnLine(tmp, axis));
+      function pointAxialSymmetry2(point9, axis) {
+        let tmp = point9.clone();
+        pointCentralSymmetry3(point9, index2.projectVectorOnLine(tmp, axis));
         tmp.dispose();
-        return point7;
+        return point9;
       }
-      function pointCentralSymmetry3(point7, center) {
-        point7.x = 2 * center.x - point7.x;
-        point7.y = 2 * center.y - point7.y;
-        return point7;
+      function pointCentralSymmetry3(point9, center) {
+        point9.x = 2 * center.x - point9.x;
+        point9.y = 2 * center.y - point9.y;
+        return point9;
       }
-      function circleAxialSymmetry3(circle6, axis) {
-        pointAxialSymmetry2(circle6.center, axis);
+      function circleAxialSymmetry3(circle5, axis) {
+        pointAxialSymmetry2(circle5.center, axis);
       }
-      function circleCentralSymmetry3(circle6, center) {
-        pointCentralSymmetry3(circle6.center, center);
+      function circleCentralSymmetry3(circle5, center) {
+        pointCentralSymmetry3(circle5.center, center);
       }
 
       // src/maths/index.js
@@ -524,9 +533,9 @@
         circleAxialSymmetry: () => circleAxialSymmetry3,
         circleCentralSymmetry: () => circleCentralSymmetry3,
         circlesDistance: () => circlesDistance,
-        circlesIntersections: () => circlesIntersections4,
+        circlesIntersections: () => circlesIntersections3,
         default: () => Matrix32,
-        lerp: () => lerp2,
+        lerp: () => lerp,
         lineCircleDistance: () => lineCircleDistance,
         lineCircleIntersection: () => lineCircleIntersection2,
         linesIntersection: () => linesIntersection4,
@@ -546,22 +555,22 @@
           x2: (-b + ds) / (2 * a)
         };
       }
-      function lerp2(a, b, t) {
+      function lerp(a, b, t) {
         return a + t * (b - a);
       }
 
       // src/gui/graphics/drawing.js
-      function drawPoint(stage2, point7) {
+      function drawPoint(stage2, point9) {
         const radius = 5;
-        const x = point7.geom.x;
-        const y = point7.geom.y;
+        const x = point9.geom.x;
+        const y = point9.geom.y;
         const ctx = stage2.ctx;
         ctx.beginPath();
         const s = stage2.scale;
         const t = stage2.translation;
         ctx.moveTo(t.x + x * s.x + radius, t.y + y * s.y);
         ctx.arc(t.x + x * s.x, t.y + y * s.y, radius, 0, 2 * Math.PI);
-        const style = point7.style;
+        const style = point9.style;
         ctx.save();
         if (style.stroke !== void 0) {
           ctx.strokeStyle = style.stroke.toString();
@@ -576,9 +585,9 @@
         }
         ctx.restore();
       }
-      function drawCircle(stage2, circle6) {
-        const c = circle6.geom.center;
-        const r = circle6.geom.radius;
+      function drawCircle(stage2, circle5) {
+        const c = circle5.geom.center;
+        const r = circle5.geom.radius;
         const ctx = stage2.ctx;
         ctx.beginPath();
         ctx.save();
@@ -588,7 +597,7 @@
         ctx.arc(c.x, c.y, r, 0, 2 * Math.PI);
         ctx.restore();
         ctx.save();
-        const style = circle6.style;
+        const style = circle5.style;
         if (style.stroke !== void 0) {
           ctx.strokeStyle = style.stroke.toString();
           if (style.dash !== void 0) {
@@ -651,10 +660,10 @@
         }
         ctx.restore();
       }
-      function drawVector(stage2, vector3) {
+      function drawVector(stage2, vector4) {
         const ctx = stage2.ctx;
-        const p1 = vector3.geom.p1;
-        const p2 = vector3.geom.p2;
+        const p1 = vector4.geom.p1;
+        const p2 = vector4.geom.p2;
         ctx.beginPath();
         ctx.save();
         ctx.translate(stage2.translation.x, stage2.translation.y);
@@ -662,7 +671,7 @@
         ctx.moveTo(p1.x, p1.y);
         ctx.lineTo(p2.x, p2.y);
         ctx.restore();
-        const style = vector3.style;
+        const style = vector4.style;
         ctx.save();
         if (style.stroke !== void 0) {
           ctx.strokeStyle = style.stroke.toString();
@@ -721,6 +730,51 @@
         if (style.fill !== void 0) {
           ctx.fillStyle = style.fill.toString();
           ctx.fill();
+        }
+        ctx.restore();
+      }
+      function drawFuncGraph(stage2, func) {
+        const ctx = stage2.ctx;
+        ctx.beginPath();
+        const w = stage2.window;
+        ctx.save();
+        ctx.translate(stage2.translation.x, stage2.translation.y);
+        ctx.scale(stage2.scale.x, stage2.scale.y);
+        let prev = {
+          x: w.x,
+          y: func.input.func(w.x)
+        };
+        let isPrevVisible = w.contains(prev.x, prev.y);
+        ctx.moveTo(prev.x, prev.y);
+        const nSteps = stage2.scale.x * w.width;
+        for (let i = 0; i < nSteps; i++) {
+          const x = w.x + lerp(0, w.width, i / nSteps);
+          const val = func.input.func(x);
+          const isValVisible = w.contains(x, val);
+          if (isPrevVisible) {
+            ctx.lineTo(x, val);
+            isPrevVisible = isValVisible;
+          } else if (isValVisible) {
+            ctx.moveTo(prev.x, prev.y);
+            ctx.lineTo(x, val);
+            isPrevVisible = true;
+          } else {
+            isPrevVisible = false;
+          }
+          prev = {
+            x,
+            y: val
+          };
+        }
+        ctx.restore();
+        const style = func.style;
+        ctx.save();
+        if (style.stroke !== void 0) {
+          ctx.strokeStyle = style.stroke.toString();
+          if (style.dash !== void 0) {
+            ctx.setLineDash(style.dash);
+          }
+          ctx.stroke();
         }
         ctx.restore();
       }
@@ -799,27 +853,27 @@
           geom.vector.copy(p2.geom).sub(p1.geom);
         }
       }));
-      const lineFromPointVector = makeTypedFunction([pointType, vectorType], (point7, vector3) => ({
+      const lineFromPointVector = makeTypedFunction([pointType, vectorType], (point9, vector4) => ({
         description: "line from (point, vector)",
         ...baseLine(),
         input: {
-          point: point7,
-          vector: vector3
+          point: point9,
+          vector: vector4
         },
         update({geom}) {
-          geom.set(point7.geom, vector3.geom);
+          geom.set(point9.geom, vector4.geom);
         }
       }));
-      const perpendicular = makeTypedFunction([lineType, pointType], (line5, point7) => {
+      const perpendicular = makeTypedFunction([lineType, pointType], (line5, point9) => {
         return {
           ...baseLine(),
           description: "line from (point, vector)",
           input: {
             line: line5,
-            point: point7
+            point: point9
           },
           update({geom}) {
-            geom.point.copy(point7.geom);
+            geom.point.copy(point9.geom);
             const lv = line5.geom.vector;
             geom.vector.set(-lv.y, lv.x);
           }
@@ -906,27 +960,27 @@
           geom.p2.copy(p2.geom);
         }
       });
-      const segmentFromVector = (vector3) => ({
+      const segmentFromVector = (vector4) => ({
         ...baseSegment(),
         description: "segment from vector",
         input: {
-          vector: vector3
+          vector: vector4
         },
         update: ({geom}) => {
-          geom.p1.copy(vector3.p1.geom);
-          geom.p2.copy(vector3.p2.geom);
+          geom.p1.copy(vector4.p1.geom);
+          geom.p2.copy(vector4.p2.geom);
         }
       });
-      const segmentFromPointVector = (point7, vector3) => ({
+      const segmentFromPointVector = (point9, vector4) => ({
         ...baseSegment(),
         description: "segment from point vector",
         input: {
-          point: point7,
-          vector: vector3
+          point: point9,
+          vector: vector4
         },
         update: ({geom}) => {
-          geom.copy(point7.geom);
-          geom.copy(point7.geom).add(vector3.geom);
+          geom.copy(point9.geom);
+          geom.copy(point9.geom).add(vector4.geom);
         }
       });
       function segment2(...params) {
@@ -952,7 +1006,7 @@
         linesIntersection: () => linesIntersection,
         middle: () => middle,
         mouse: () => mouse,
-        point: () => point4,
+        point: () => point5,
         pointAxialSymmetry: () => pointAxialSymmetry,
         pointCentralSymmetry: () => pointCentralSymmetry,
         pointOnCircle: () => pointOnCircle,
@@ -972,7 +1026,7 @@
         };
       }
       const randomPoint = (area) => {
-        return point4(area.x + Math.random() * area.width, area.y + Math.random() * area.height);
+        return point5(area.x + Math.random() * area.width, area.y + Math.random() * area.height);
       };
       const middle = makeTypedFunction([segmentType], (segment4) => ({
         description: "segment middle",
@@ -984,12 +1038,12 @@
           geom.lerp(input.segment.geom.p1, input.segment.geom.p2, 0.5);
         }
       }));
-      const pointOnPerpendicular = makeTypedFunction([lineType, pointType], (line5, point7) => ({
+      const pointOnPerpendicular = makeTypedFunction([lineType, pointType], (line5, point9) => ({
         description: "point on perpendicular",
         ...basePoint(),
         input: {
           line: line5,
-          point: point7
+          point: point9
         },
         update({input, geom}) {
           const pt = input.point.geom;
@@ -1039,37 +1093,37 @@
           }
         };
       });
-      const lineCircleIntersections = makeTypedFunction([lineType, circleType], (line5, circle6) => {
+      const lineCircleIntersections = makeTypedFunction([lineType, circleType], (line5, circle5) => {
         return {
           description: "line circle intersections",
           input: {
             line: line5,
-            circle: circle6
+            circle: circle5
           },
           output: [basePoint(), basePoint()],
           update({output}) {
-            index2.lineCircleIntersection(line5.geom, circle6.geom, output[0].geom, output[1].geom);
+            index2.lineCircleIntersection(line5.geom, circle5.geom, output[0].geom, output[1].geom);
           }
         };
       });
-      const circlesIntersections = makeTypedFunction([circleType, circleType], (c12, c22) => {
+      const circlesIntersections = makeTypedFunction([circleType, circleType], (c1, c2) => {
         const result = {
           description: "circles intersections",
           input: {
-            c1: c12,
-            c2: c22
+            c1,
+            c2
           },
           type: listType(pointType),
           update({output}) {
-            index2.circlesIntersections(c12.geom, c22.geom, output[0].geom, output[1].geom);
+            index2.circlesIntersections(c1.geom, c2.geom, output[0].geom, output[1].geom);
           }
         };
         result.output = [basePoint(), basePoint()].map((p) => ({
           ...p,
           description: "circles intersection",
           input: {
-            c1: c12,
-            c2: c22
+            c1,
+            c2
           },
           helpers: {
             result
@@ -1091,7 +1145,7 @@
           }
         };
       });
-      const pointOnLine = makeTypedFunction([lineType], (line5, position) => {
+      const pointOnLine = makeTypedFunction([lineType, untyped], (line5, position) => {
         const pt = basePoint();
         pt.geom.copy(position);
         return {
@@ -1105,17 +1159,17 @@
           }
         };
       });
-      const pointOnCircle = makeTypedFunction([circleType], (circle6, position) => {
+      const pointOnCircle = makeTypedFunction([circleType, untyped], (circle5, position) => {
         const pt = basePoint();
         pt.geom.copy(position);
         return {
           ...pt,
           description: "point on circle",
           input: {
-            circle: circle6
+            circle: circle5
           },
           update({geom}) {
-            index2.projectVectorOnCircle(geom, circle6.geom, geom);
+            index2.projectVectorOnCircle(geom, circle5.geom, geom);
           }
         };
       });
@@ -1128,29 +1182,29 @@
           geom.copy(mouse5.position);
         }
       });
-      const pointCentralSymmetry = makeTypedFunction([pointType, pointType], (point7, center) => ({
+      const pointCentralSymmetry = makeTypedFunction([pointType, pointType], (point9, center) => ({
         ...basePoint(),
         description: "point central symmetry",
         input: {
-          point: point7,
+          point: point9,
           center
         },
         update({geom}) {
-          index2.pointCentralSymmetry(geom.copy(point7.geom), center);
+          index2.pointCentralSymmetry(geom.copy(point9.geom), center);
         }
       }));
-      const pointAxialSymmetry = makeTypedFunction([pointType, lineType], (point7, axis) => ({
+      const pointAxialSymmetry = makeTypedFunction([pointType, lineType], (point9, axis) => ({
         ...basePoint(),
         description: "point axial symmetry",
         input: {
-          point: point7,
+          point: point9,
           axis
         },
         update({geom}) {
-          index2.pointaxialSymmetry(geom.copy(point7.geom), axis);
+          index2.pointaxialSymmetry(geom.copy(point9.geom), axis);
         }
       }));
-      function point4(x, y) {
+      function point5(x, y) {
         const pt = basePoint();
         pt.geom.set(x, y);
         return pt;
@@ -1170,25 +1224,25 @@
       }
 
       // src/api/selection.js
-      function selectInCircle(objects, circle6) {
+      function selectInCircle(objects, circle5) {
         const result = [];
         objects.forEach((object) => {
           if (object.selectable === false) {
             return;
           }
           if (Array.isArray(object)) {
-            result.push(...selectInCircle(object, circle6));
+            result.push(...selectInCircle(object, circle5));
           } else {
             let distance2;
             switch (object.type) {
               case pointType:
-                distance2 = index2.vectorsDistance(circle6.center, object.geom);
+                distance2 = index2.vectorsDistance(circle5.center, object.geom);
                 break;
               case lineType:
-                distance2 = index2.vectorLineDistance(circle6.center, object.geom);
+                distance2 = index2.vectorLineDistance(circle5.center, object.geom);
                 break;
               case circleType:
-                distance2 = index2.vectorCircleDistance(circle6.center, object.geom);
+                distance2 = index2.vectorCircleDistance(circle5.center, object.geom);
                 break;
               default:
                 console.warn("type not handled : " + object.type);
@@ -1201,7 +1255,7 @@
             });
           }
         });
-        return result.filter((o) => Math.abs(o.distance) < circle6.radius);
+        return result.filter((o) => Math.abs(o.distance) < circle5.radius);
       }
 
       // src/constructions/circle.js
@@ -1257,16 +1311,16 @@
           geom.radius = index2.Vector2.dist(helpers.center.geom, p1.geom);
         }
       }));
-      const circleFromCenterPoint = makeTypedFunction([pointType, pointType], (center, point7) => ({
+      const circleFromCenterPoint = makeTypedFunction([pointType, pointType], (center, point9) => ({
         ...baseCircle(),
         description: "Circle from (center, point)",
         input: {
           center,
-          point: point7
+          point: point9
         },
         update({geom}) {
           geom.center.copy(center.geom);
-          geom.radius = index2.Vector2.dist(geom.center, point7.geom);
+          geom.radius = index2.Vector2.dist(geom.center, point9.geom);
         }
       }));
       const circleFromCenterRadius = makeTypedFunction([pointType, scalarType], (center, radius) => ({
@@ -1284,6 +1338,18 @@
       const circle2 = makeDispatch(circumCircle, circleFromCenterPoint, circleFromCenterRadius);
 
       // src/constructions/functionGraph.js
+      const functionGraph2 = (func) => ({
+        type: funcType,
+        style: new Style2({
+          stroke: "black"
+        }),
+        drawingFunc: drawFuncGraph,
+        input: {
+          func
+        },
+        output: null,
+        lastUpdated: -1
+      });
 
       // src/constructions/vector.js
       function baseVector() {
@@ -1378,6 +1444,8 @@
         circlesIntersections: () => circlesIntersections,
         circumCenter: () => circumCenter,
         circumCircle: () => circumCircle,
+        funcType: () => funcType,
+        functionGraph: () => functionGraph2,
         line: () => line2,
         lineCircleIntersections: () => lineCircleIntersections,
         lineFromPointVector: () => lineFromPointVector,
@@ -1390,7 +1458,7 @@
         middle: () => middle,
         mouse: () => mouse,
         perpendicular: () => perpendicular,
-        point: () => point4,
+        point: () => point5,
         pointAxialSymmetry: () => pointAxialSymmetry,
         pointCentralSymmetry: () => pointCentralSymmetry,
         pointOnCircle: () => pointOnCircle,
@@ -1411,6 +1479,7 @@
         segmentFromVector: () => segmentFromVector,
         segmentType: () => segmentType,
         selectInCircle: () => selectInCircle,
+        untyped: () => untyped,
         updateObject: () => updateObject,
         vector: () => vector2,
         vectorType: () => vectorType
@@ -1882,8 +1951,8 @@
           this.pointCommand.completed.add(this.onPoint, this);
           this.pointCommand = this.pointCommand;
         }
-        onPoint(point7) {
-          this.point = point7;
+        onPoint(point9) {
+          this.point = point9;
           this.pointCommand.completed.remove(this.onCenter, this);
           this.pointCommand.disable();
           this.stage.remove(this.tempPoint);
@@ -2319,10 +2388,10 @@
       const gui = new CompleteGui2();
       document.body.appendChild(gui.domElement);
       const stage = gui.stage;
-      const c1 = index.circle(gui.ranPt(), gui.ranPt());
-      const c2 = index.circle(gui.ranPt(), gui.ranPt());
-      let inters = index.circlesIntersections(c1, c2);
-      stage.add(c1, c2, inters);
+      gui.window.setCorners(-10, 10, 10, -10);
+      let origin = index.point(0, 0);
+      stage.add(index.vector(origin, index.point(1, 0)));
+      stage.add(index.vector(origin, index.point(0, 1)));
       gui.start();
     }
   };
