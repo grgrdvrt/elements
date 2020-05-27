@@ -127,8 +127,9 @@ export class Vector2{
     }
 
     toString(){
-        return `[${this.x}, ${this.y}]`
+        return `[${this.x}, ${this.y}]`;
     }
 }
 
 
+export const origin = new Vector2(0, 0);

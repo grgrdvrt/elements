@@ -17,7 +17,8 @@ import {
     untyped,
     listType,
 
-    makeTypedFunction
+    makeTypedFunction,
+    makeDispatch
 } from "../api/types";
 
 let id = 0;
@@ -161,6 +162,7 @@ export const linesIntersection = makeTypedFunction(
     }
 );
 
+
 export const pointOnLine = makeTypedFunction(
     [lineType, untyped],
     (line, position) => {
@@ -228,6 +230,32 @@ export const pointAxialSymmetry = makeTypedFunction(
     })
 );
 
+export const pointTranslation = makeTypedFunction(
+    [pointType, vectorType],
+    (point, vector) => ({
+        ...basePoint(),
+        description:"point translation",
+        input:{point, vector},
+        update({geom}){
+            geom.copy(point.geom)
+                .sub(vector.geom.p1)
+                .add(vector.geom.p2);
+        }
+    })
+);
+
+export const pointRotation = makeTypedFunction(
+    [pointType, pointType, scalarType],
+    (point, center, angle) => ({
+        ...basePoint(),
+        description:"point rotation",
+        input:{point, center, angle},
+        update({geom}){
+            maths.pointRotation(geom.copy(point), center.geom, angle);
+        }
+    })
+);
+
 
 export function point(x, y){
     const pt = basePoint();
@@ -238,16 +266,8 @@ export function point(x, y){
 /**
  * position:Vector2 only used at creation
  */
-export function pointOnObject(obj, position){
-    switch(obj.type){
-        case pointType:
-            return obj;
-        case circleType:
-            return pointOnCircle(obj, position);
-        case lineType:
-            return pointOnLine(obj, position);
-        default :
-            throw new Error("no implementation for type : " + obj.type);
-            break;
-    }
-}
+export const pointOnObject = makeDispatch(
+    makeTypedFunction([pointType, untyped], _ => _),//point on point
+    pointOnCircle,
+    pointOnLine,
+);

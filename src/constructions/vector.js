@@ -33,3 +33,15 @@ export const vector = (p1, p2) => ({
         geom.p2.copy(p2.geom);
     }
 });
+
+export const vectorRepresentant = (vec, origin) => ({
+    ...baseVector(),
+    description:"Vector representant",
+    input:{vec, origin},
+    update({geom}){
+        geom.p1.copy(origin.geom);
+        geom.p2.copy(vec.geom.p2)
+            .sub(vec.geom.p1)
+            .add(origin.geom);
+    }
+});

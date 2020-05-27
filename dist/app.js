@@ -234,6 +234,7 @@
           return `[${this.x}, ${this.y}]`;
         }
       }
+      const origin2 = new Vector25(0, 0);
 
       // src/maths/Matrix3.js
       class Matrix32 {
@@ -503,23 +504,59 @@
         return vectorLineDistance2(c.center, l) - c.radius;
       }
 
-      // src/maths/symmetry.js
+      // src/maths/transforms.js
       function pointAxialSymmetry2(point9, axis) {
         let tmp = point9.clone();
         pointCentralSymmetry3(point9, index2.projectVectorOnLine(tmp, axis));
         tmp.dispose();
         return point9;
       }
-      function pointCentralSymmetry3(point9, center) {
-        point9.x = 2 * center.x - point9.x;
-        point9.y = 2 * center.y - point9.y;
-        return point9;
-      }
       function circleAxialSymmetry3(circle5, axis) {
         pointAxialSymmetry2(circle5.center, axis);
+        return circle5;
+      }
+      function lineAxialSymmetry(line5, axis) {
+        pointAxialSymmetry2(line5.point, axis);
+        pointAxialSymmetry2(line5.vector.sub(line5.point).add(axis.point), axis);
+        return line5;
+      }
+      function pointCentralSymmetry3(point9, center) {
+        point9.set(2 * center.x - point9.x, 2 * center.y - point9.y);
+        return point9;
       }
       function circleCentralSymmetry3(circle5, center) {
         pointCentralSymmetry3(circle5.center, center);
+        return circle5;
+      }
+      function lineCentralSymmetry(line5, axis) {
+        pointCentralSymmetry3(line5.point, axis);
+        line5.vector.multiplyScalar(-1);
+        return line5;
+      }
+      function pointRotation4(point9, center, angle) {
+        return point9.sub(center).rotate(angle).add(center);
+      }
+      function circleRotation(circle5, center, angle) {
+        pointRotation4(circle5.center, center, angle);
+        return circle5;
+      }
+      function lineRotation(line5, center, angle) {
+        pointRotation4(line5.point, center, angle);
+        line5.vector.rotate(angle);
+        return line5;
+      }
+      function pointHomothecy(point9, center, scale) {
+        return point9.sub(center).multiplyScalar(scale);
+      }
+      function circleHomotecy(circle5, center, scale) {
+        pointHomothecy(circle5.center, center, scale);
+        circle5.radius *= scale;
+        return circle5;
+      }
+      function lineHomotecy(line5, center, scale) {
+        pointHomothecy(line5.point);
+        line5.vector.multiplyScalar(scale);
+        return line5;
       }
 
       // src/maths/index.js
@@ -532,15 +569,24 @@
         Vector2: () => Vector25,
         circleAxialSymmetry: () => circleAxialSymmetry3,
         circleCentralSymmetry: () => circleCentralSymmetry3,
+        circleHomotecy: () => circleHomotecy,
+        circleRotation: () => circleRotation,
         circlesDistance: () => circlesDistance,
         circlesIntersections: () => circlesIntersections3,
         default: () => Matrix32,
         lerp: () => lerp,
+        lineAxialSymmetry: () => lineAxialSymmetry,
+        lineCentralSymmetry: () => lineCentralSymmetry,
         lineCircleDistance: () => lineCircleDistance,
         lineCircleIntersection: () => lineCircleIntersection2,
+        lineHomotecy: () => lineHomotecy,
+        lineRotation: () => lineRotation,
         linesIntersection: () => linesIntersection4,
+        origin: () => origin2,
         pointAxialSymmetry: () => pointAxialSymmetry2,
         pointCentralSymmetry: () => pointCentralSymmetry3,
+        pointHomothecy: () => pointHomothecy,
+        pointRotation: () => pointRotation4,
         projectVectorOnCircle: () => projectVectorOnCircle2,
         projectVectorOnLine: () => projectVectorOnLine2,
         quadraticRoots: () => quadraticRoots,
@@ -821,17 +867,24 @@
       }
 
       // src/constructions/scalar.js
+      let id5 = 0;
       function scalar2(value) {
         return {
           type: scalarType,
-          value: value.type === scalarType ? value.value : value
+          name: `Scalar_${id5++}`,
+          value: value.type === scalarType ? value.value : value,
+          valueOf() {
+            return value;
+          }
         };
       }
 
       // src/constructions/line.js
+      let id2 = 0;
       function baseLine() {
         return {
           type: lineType,
+          name: `Line_${id2++}`,
           style: new Style2({
             stroke: "black"
           }),
@@ -938,9 +991,11 @@
       }
 
       // src/constructions/segment.js
+      let id6 = 0;
       function baseSegment() {
         return {
           type: segmentType,
+          name: `Segment_${id6++}`,
           style: new Style2({
             stroke: "black"
           }),
@@ -1013,11 +1068,15 @@
         pointOnLine: () => pointOnLine,
         pointOnObject: () => pointOnObject,
         pointOnPerpendicular: () => pointOnPerpendicular,
+        pointRotation: () => pointRotation,
+        pointTranslation: () => pointTranslation,
         randomPoint: () => randomPoint
       });
+      let id3 = 0;
       function basePoint() {
         return {
           type: pointType,
+          name: `Point_${id3++}`,
           style: new Style2({
             fill: "black"
           }),
@@ -1204,24 +1263,35 @@
           index2.pointaxialSymmetry(geom.copy(point9.geom), axis);
         }
       }));
+      const pointTranslation = makeTypedFunction([pointType, vectorType], (point9, vector4) => ({
+        ...basePoint(),
+        description: "point translation",
+        input: {
+          point: point9,
+          vector: vector4
+        },
+        update({geom}) {
+          geom.copy(point9.geom).sub(vector4.geom.p1).add(vector4.geom.p2);
+        }
+      }));
+      const pointRotation = makeTypedFunction([pointType, pointType, scalarType], (point9, center, angle) => ({
+        ...basePoint(),
+        description: "point rotation",
+        input: {
+          point: point9,
+          center,
+          angle
+        },
+        update({geom}) {
+          index2.pointRotation(geom.copy(point9), center.geom, angle);
+        }
+      }));
       function point5(x, y) {
         const pt = basePoint();
         pt.geom.set(x, y);
         return pt;
       }
-      function pointOnObject(obj, position) {
-        switch (obj.type) {
-          case pointType:
-            return obj;
-          case circleType:
-            return pointOnCircle(obj, position);
-          case lineType:
-            return pointOnLine(obj, position);
-          default:
-            throw new Error("no implementation for type : " + obj.type);
-            break;
-        }
-      }
+      const pointOnObject = makeDispatch(makeTypedFunction([pointType, untyped], (_) => _), pointOnCircle, pointOnLine);
 
       // src/api/selection.js
       function selectInCircle(objects, circle5) {
@@ -1259,9 +1329,11 @@
       }
 
       // src/constructions/circle.js
+      let id = 0;
       function baseCircle() {
         return {
           type: circleType,
+          name: `Circle_${id++}`,
           style: new Style2({
             stroke: "black"
           }),
@@ -1352,9 +1424,11 @@
       });
 
       // src/constructions/vector.js
+      let id7 = 0;
       function baseVector() {
         return {
           type: vectorType,
+          name: `Vector_${id7++}`,
           style: new Style2({
             stroke: "black"
           }),
@@ -1374,11 +1448,25 @@
           geom.p2.copy(p2.geom);
         }
       });
+      const vectorRepresentant = (vec, origin3) => ({
+        ...baseVector(),
+        description: "Vector representant",
+        input: {
+          vec,
+          origin: origin3
+        },
+        update({geom}) {
+          geom.p1.copy(origin3.geom);
+          geom.p2.copy(vec.geom.p2).sub(vec.geom.p1).add(origin3.geom);
+        }
+      });
 
       // src/constructions/polygon.js
+      let id4 = 0;
       function basePolygon(pts) {
         return {
           type: polygonType,
+          name: `Polygon_${id4++}`,
           style: new Style2({
             stroke: "black"
           }),
@@ -1465,6 +1553,8 @@
         pointOnLine: () => pointOnLine,
         pointOnObject: () => pointOnObject,
         pointOnPerpendicular: () => pointOnPerpendicular,
+        pointRotation: () => pointRotation,
+        pointTranslation: () => pointTranslation,
         pointType: () => pointType,
         polygon: () => polygon2,
         polygonType: () => polygonType,
@@ -1482,6 +1572,7 @@
         untyped: () => untyped,
         updateObject: () => updateObject,
         vector: () => vector2,
+        vectorRepresentant: () => vectorRepresentant,
         vectorType: () => vectorType
       });
 
@@ -1520,9 +1611,9 @@
         }
         remove(...items) {
           items.forEach((item) => {
-            const id = this.items.indexOf(item);
-            if (id !== -1) {
-              this.items.splice(id, 1);
+            const id8 = this.items.indexOf(item);
+            if (id8 !== -1) {
+              this.items.splice(id8, 1);
             }
           });
         }
@@ -1564,8 +1655,8 @@
       window.requestAnimationFrame = window.requestAnimationFrame || window.mozRequestAnimationFrame || window.webkitRequestAnimationFrame || window.msRequestAnimationFrame || function(fn) {
         return setTimeout(fn, 50 / 3);
       };
-      window.cancelAnimationFrame = window.cancelAnimationFrame || window.mozCancelAnimationFrame || window.webkitCancelAnimationFrame || function(id) {
-        clearTimeout(id);
+      window.cancelAnimationFrame = window.cancelAnimationFrame || window.mozCancelAnimationFrame || window.webkitCancelAnimationFrame || function(id8) {
+        clearTimeout(id8);
       };
       if (!Function.prototype.bind) {
         console.log("prototo");
@@ -1636,9 +1727,9 @@
           }
         }
         removeListener(listener) {
-          let id = this.listeners.indexOf(listener);
-          if (id !== -1) {
-            this.listeners.splice(id, 1);
+          let id8 = this.listeners.indexOf(listener);
+          if (id8 !== -1) {
+            this.listeners.splice(id8, 1);
           }
         }
         dispatch() {
@@ -2274,8 +2365,8 @@
           });
         }
         onClick(evt) {
-          let id = parseInt(evt.target.dataset.id);
-          this.setCurrentTool(this.tools[id]);
+          let id8 = parseInt(evt.target.dataset.id);
+          this.setCurrentTool(this.tools[id8]);
         }
         setCurrentTool(tool) {
           if (this.currentTool !== void 0) {
@@ -2388,10 +2479,17 @@
       const gui = new CompleteGui2();
       document.body.appendChild(gui.domElement);
       const stage = gui.stage;
-      gui.window.setCorners(-10, 10, 10, -10);
       let origin = index.point(0, 0);
       stage.add(index.vector(origin, index.point(1, 0)));
       stage.add(index.vector(origin, index.point(0, 1)));
+      {
+        const pt = gui.ranPt();
+        const center = gui.ranPt();
+        center.style.fill = "blue";
+        const rotPt = index.pointRotation(pt, center, 0.5 * Math.PI);
+        rotPt.style.fill = "red";
+        stage.add(pt, center, rotPt);
+      }
       gui.start();
     }
   };

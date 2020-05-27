@@ -13,6 +13,7 @@ export function scalar(value){
     return {
         type : scalarType,
         name : `Scalar_${id++}`,
-        value : value.type === scalarType ? value.value : value
+        value : value.type === scalarType ? value.value : value,
+        valueOf(){return value;}
     };
 }

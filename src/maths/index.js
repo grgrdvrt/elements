@@ -7,7 +7,7 @@ export * from "./Rectangle";
 export * from "./intersection";
 export * from "./projection";
 export * from "./distance";
-export * from "./symmetry";
+export * from "./transforms";
 
 export function quadraticRoots(a, b, c){
   let ds = Math.sqrt(b * b - 4 * a * c);

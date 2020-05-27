@@ -5,7 +5,6 @@ const gui = new Gui();
 document.body.appendChild(gui.domElement);
 
 const stage = gui.stage;
-gui.window.setCorners(-10, 10, 10, -10);
 
 /** circum circle **/
 // const t1 = gui.ranPt();
@@ -104,5 +103,27 @@ stage.add(api.vector(origin, api.point(0, 1)));
 // const pts = [];
 // for(let i = 0; i < 500; i++) pts.push(gui.ranPt())
 // stage.add(pts.map(pt => api.circle(pt, gui.mouse)));
+
+/** translations **/
+// {
+//     const pt = gui.ranPt();
+//     const vec = api.vector(gui.ranPt(), gui.ranPt());
+//     const rep = api.vectorRepresentant(vec, pt);
+//     rep.style.stroke = "blue";
+//     const transPt = api.pointTranslation(pt, vec);
+//     transPt.style.fill = "red";
+//     stage.add(pt, vec, rep, transPt);
+// }
+
+/** rotations **/
+{
+    const pt = gui.ranPt();
+    const center = gui.ranPt();
+    center.style.fill = "blue";
+    const rotPt = api.pointRotation(pt, center, 0.5 * Math.PI);
+    rotPt.style.fill = "red";
+    stage.add(pt, center, rotPt);
+}
+
 
 gui.start();
