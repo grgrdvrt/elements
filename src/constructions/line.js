@@ -118,6 +118,72 @@ export const angleBissector = makeTypedFunction(
 );
 
 
+
+/** transforms **/
+
+export const lineCentralSymmetry = makeTypedFunction(
+    [lineType, pointType],
+    (line, center) => ({
+        ...baseLine(),
+        description:"line central symmetry",
+        input:{line, center},
+        update({geom}){
+            maths.lineCentralSymmetry(geom.copy(line.geom), center);
+        }
+    })
+);
+
+export const lineAxialSymmetry = makeTypedFunction(
+    [lineType, lineType],
+    (line, axis) => ({
+        ...baseLine(),
+        description:"line axial symmetry",
+        input:{line, axis},
+        update({geom}){
+            maths.lineAxialSymmetry(geom.copy(line.geom), axis);
+        }
+    })
+);
+
+export const lineTranslation = makeTypedFunction(
+    [lineType, vectorType],
+    (line, vector) => ({
+        ...baseLine(),
+        description:"line translation",
+        input:{line, vector},
+        update({geom}){
+            geom.copy(line.geom);
+            geom.point.sub(vector.geom.p1)
+                .add(vector.geom.p2);
+        }
+    })
+);
+
+export const lineRotation = makeTypedFunction(
+    [lineType, pointType, scalarType],
+    (line, center, angle) => ({
+        ...baseLine(),
+        description:"line rotation",
+        input:{line, center, angle},
+        update({geom}){
+            maths.lineRotation(geom.copy(line.geom), center.geom, angle);
+        }
+    })
+);
+
+
+export const lineHomothecy = makeTypedFunction(
+    [lineType, pointType, scalarType],
+    (line, center, scale) => ({
+        ...baseLine(),
+        description:"line homotecy",
+        input:{line, center, scale},
+        update({geom}){
+            maths.lineHomothecy(geom.copy(line.geom), center.geom, scale);
+        }
+    })
+);
+
 export function line(a, b){
     if(a.type === pointType && b.type === pointType){
         return lineFromPoints(a, b);

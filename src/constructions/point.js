@@ -206,6 +206,10 @@ export const mouse = (stage, mouse) => ({
     }
 });
 
+
+
+/** transforms **/
+
 export const pointCentralSymmetry = makeTypedFunction(
     [pointType, pointType],
     (point, center) => ({
@@ -225,7 +229,7 @@ export const pointAxialSymmetry = makeTypedFunction(
         description:"point axial symmetry",
         input:{point, axis},
         update({geom}){
-            maths.pointaxialSymmetry(geom.copy(point.geom), axis);
+            maths.pointAxialSymmetry(geom.copy(point.geom), axis);
         }
     })
 );
@@ -251,11 +255,23 @@ export const pointRotation = makeTypedFunction(
         description:"point rotation",
         input:{point, center, angle},
         update({geom}){
-            maths.pointRotation(geom.copy(point), center.geom, angle);
+            maths.pointRotation(geom.copy(point.geom), center.geom, angle);
         }
     })
 );
 
+
+export const pointHomothecy = makeTypedFunction(
+    [pointType, pointType, scalarType],
+    (point, center, scale) => ({
+        ...basePoint(),
+        description:"point homotecy",
+        input:{point, center, scale},
+        update({geom}){
+            maths.pointHomothecy(geom.copy(point.geom), center.geom, scale);
+        }
+    })
+);
 
 export function point(x, y){
     const pt = basePoint();

@@ -21,4 +21,10 @@ export class Line{
             .multiplyScalar(t)
             .add(this.point);
     }
+
+    copy(line){
+        this.point.copy(line.point);
+        this.vector.copy(line.vector);
+        return this;
+    }
 }

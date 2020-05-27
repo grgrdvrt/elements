@@ -35,31 +35,6 @@ export function baseCircle(){
 }
 
 
-export const circleAxialSymmetry = makeTypedFunction(
-    [circleType, lineType],
-    (c, axis) => ({
-        ...baseCircle(),
-        description : "circle axial symmetry",
-        input : {c, axis},
-        update({geom}){
-            geom.copy(c.geom);
-            maths.circleAxialSymmetry(geom, axis.geom);
-        }
-    })
-);
-
-export const circleCentralSymmetry = makeTypedFunction(
-    [circleType, pointType],
-    (c, center) => ({
-        ...baseCircle(),
-        description:"circle central symmetry",
-        input : {c, center},
-        update({geom}){
-            geom.copy(c.geom);
-            maths.circleCentralSymmetry(geom, center.geom);
-        }
-    })
-);
 
 export const circumCircle = makeTypedFunction(
     [pointType, pointType, pointType],
@@ -99,6 +74,71 @@ export const circleFromCenterRadius = makeTypedFunction(
         update({geom}){
             geom.center.copy(center.geom);
             geom.radius = radius.value;
+        }
+    })
+);
+
+/** transforms **/
+
+export const circleAxialSymmetry = makeTypedFunction(
+    [circleType, lineType],
+    (c, axis) => ({
+        ...baseCircle(),
+        description : "circle axial symmetry",
+        input : {c, axis},
+        update({geom}){
+            maths.circleAxialSymmetry(geom.copy(c.geom), axis.geom);
+        }
+    })
+);
+
+export const circleCentralSymmetry = makeTypedFunction(
+    [circleType, pointType],
+    (c, center) => ({
+        ...baseCircle(),
+        description:"circle central symmetry",
+        input : {c, center},
+        update({geom}){
+            maths.circleCentralSymmetry(geom.copy(c.geom), center.geom);
+        }
+    })
+);
+
+export const circleTranslation = makeTypedFunction(
+    [circleType, vectorType],
+    (circle, vector) => ({
+        ...baseCircle(),
+        description:"circle translation",
+        input:{circle, vector},
+        update({geom}){
+            geom.copy(circle.geom);
+            geom.center.sub(vector.geom.p1)
+                .add(vector.geom.p2);
+        }
+    })
+);
+
+export const circleRotation = makeTypedFunction(
+    [circleType, pointType, scalarType],
+    (circle, center, angle) => ({
+        ...baseCircle(),
+        description:"circle rotation",
+        input:{circle, center, angle},
+        update({geom}){
+            maths.circleRotation(geom.copy(circle.geom), center.geom, angle);
+        }
+    })
+);
+
+
+export const circleHomothecy = makeTypedFunction(
+    [circleType, pointType, scalarType],
+    (circle, center, scale) => ({
+        ...baseCircle(),
+        description:"circle homotecy",
+        input:{circle, center, scale},
+        update({geom}){
+            maths.circleHomothecy(geom.copy(circle.geom), center.geom, scale);
         }
     })
 );
