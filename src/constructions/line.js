@@ -92,6 +92,18 @@ export const segmentBissector = makeTypedFunction(
         }
     })
 );
+export const bissectorPointPoint = makeTypedFunction(
+    [pointType, pointType],
+    (p1, p2) => ({
+        description:"bissector point point",
+        ...baseLine(),
+        input:{p1, p2},
+        update({geom}){
+            geom.point.lerp(p1.geom, p2.geom, 0.5);
+            geom.vector.set(p1.geom.y - p2.geom.y, p2.geom.x - p1.geom.x);
+        }
+    })
+);
 
 
 export const angleBissector = makeTypedFunction(

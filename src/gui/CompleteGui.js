@@ -44,6 +44,8 @@ export default class CompleteGui{
         let selector = new ToolsSelector([
             new Tool(this.stage, this.mouseController, commands.DragPoint, "drag point", "icon"),
             new Tool(this.stage, this.mouseController, commands.LinePointPoint, "create line", "icon"),
+            new Tool(this.stage, this.mouseController, commands.SegmentPointPoint, "create segment", "icon"),
+            new Tool(this.stage, this.mouseController, commands.BissectorPointPoint, "create bissector", "icon"),
             new Tool(this.stage, this.mouseController, commands.CircleCenterPoint, "create circle", "icon"),
             new Tool(this.stage, this.mouseController, commands.DragStage, "drag", "icon")
         ]);

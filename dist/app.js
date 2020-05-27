@@ -41,7 +41,7 @@
   };
   let __commonjs;
   __commonjs = {
-    27() {
+    29() {
       // src/api/construction.js
       function updateObject(object, timeStamp) {
         if (object.lastUpdated >= timeStamp) {
@@ -345,9 +345,9 @@
         getPointAt(t, v = new index2.Vector2()) {
           return v.copy(this.vector).multiplyScalar(t).add(this.point);
         }
-        copy(line7) {
-          this.point.copy(line7.point);
-          this.vector.copy(line7.vector);
+        copy(line6) {
+          this.point.copy(line6.point);
+          this.vector.copy(line6.vector);
           return this;
         }
       }
@@ -370,9 +370,9 @@
           this.radius = radius;
           return this;
         }
-        copy(circle7) {
-          this.center.copy(circle7.center);
-          this.radius = circle7.radius;
+        copy(circle6) {
+          this.center.copy(circle6.center);
+          this.radius = circle6.radius;
           return this;
         }
       }
@@ -429,14 +429,14 @@
         let t = (yv2 * dxp - xv2 * dyp) / (xv1 * yv2 - xv2 * yv1);
         return l1.getPointAt(t, v);
       }
-      function lineCircleIntersection2(line7, circle7, v1 = new index2.Vector2(), v2 = new index2.Vector2()) {
-        let v = line7.vector;
-        let p = line7.point;
-        let c = circle7.center;
-        let r = circle7.radius;
+      function lineCircleIntersection2(line6, circle6, v1 = new index2.Vector2(), v2 = new index2.Vector2()) {
+        let v = line6.vector;
+        let p = line6.point;
+        let c = circle6.center;
+        let r = circle6.radius;
         let roots = index2.quadraticRoots(v.dot(v), 2 * (p.x * v.x + p.y * v.y - c.x * v.x - c.y * v.y), c.dot(c) + p.dot(p) - 2 * (c.x * p.x + c.y * p.y) - r * r);
-        line7.getPointAt(roots.x1, v1);
-        line7.getPointAt(roots.x2, v2);
+        line6.getPointAt(roots.x1, v1);
+        line6.getPointAt(roots.x2, v2);
       }
       function circlesIntersections3(circle1, circle22, v1 = new index2.Vector2(), v2 = new index2.Vector2()) {
         let c1 = circle1.center;
@@ -475,16 +475,16 @@
       }
 
       // src/maths/projection.js
-      function projectVectorOnCircle2(vector4, circle7, result = new index2.Vector2()) {
-        result.copy(vector4).sub(circle7.center).setLength(circle7.radius).add(circle7.center);
+      function projectVectorOnCircle2(vector4, circle6, result = new index2.Vector2()) {
+        result.copy(vector4).sub(circle6.center).setLength(circle6.radius).add(circle6.center);
         return result;
       }
-      function projectVectorOnLine2(vector4, line7) {
-        let ab = line7.vector.getLength();
-        let ac = index2.vectorsDistance(line7.point, vector4);
-        let bc = index2.vectorsDistance(line7.point.clone().add(line7.vector), vector4);
+      function projectVectorOnLine2(vector4, line6) {
+        let ab = line6.vector.getLength();
+        let ac = index2.vectorsDistance(line6.point, vector4);
+        let bc = index2.vectorsDistance(line6.point.clone().add(line6.vector), vector4);
         let ai = -(bc * bc - ab * ab - ac * ac) / (2 * ab);
-        let result = line7.vector.clone().setLength(ai).add(line7.point);
+        let result = line6.vector.clone().setLength(ai).add(line6.point);
         vector4.copy(result);
         result.dispose();
         return vector4;
@@ -496,9 +496,9 @@
         let dy = v2.y - v1.y;
         return Math.hypot(dx, dy);
       }
-      function vectorLineDistance2(vector4, line7) {
-        let l2 = new index2.Line(vector4, new index2.Vector2(-line7.vector.y, line7.vector.x));
-        let p = index2.linesIntersection(line7, l2);
+      function vectorLineDistance2(vector4, line6) {
+        let l2 = new index2.Line(vector4, new index2.Vector2(-line6.vector.y, line6.vector.x));
+        let p = index2.linesIntersection(line6, l2);
         return vectorsDistance2(vector4, p);
       }
       function vectorCircleDistance2(v, c) {
@@ -518,52 +518,52 @@
         tmp.dispose();
         return point10;
       }
-      function circleAxialSymmetry3(circle7, axis) {
-        pointAxialSymmetry3(circle7.center, axis);
-        return circle7;
+      function circleAxialSymmetry3(circle6, axis) {
+        pointAxialSymmetry3(circle6.center, axis);
+        return circle6;
       }
-      function lineAxialSymmetry3(line7, axis) {
-        pointAxialSymmetry3(line7.point, axis);
-        pointAxialSymmetry3(line7.vector.sub(line7.point).add(axis.point), axis);
-        return line7;
+      function lineAxialSymmetry3(line6, axis) {
+        pointAxialSymmetry3(line6.point, axis);
+        pointAxialSymmetry3(line6.vector.sub(line6.point).add(axis.point), axis);
+        return line6;
       }
       function pointCentralSymmetry3(point10, center) {
         point10.set(2 * center.x - point10.x, 2 * center.y - point10.y);
         return point10;
       }
-      function circleCentralSymmetry3(circle7, center) {
-        pointCentralSymmetry3(circle7.center, center);
-        return circle7;
+      function circleCentralSymmetry3(circle6, center) {
+        pointCentralSymmetry3(circle6.center, center);
+        return circle6;
       }
-      function lineCentralSymmetry3(line7, axis) {
-        pointCentralSymmetry3(line7.point, axis);
-        line7.vector.multiplyScalar(-1);
-        return line7;
+      function lineCentralSymmetry3(line6, axis) {
+        pointCentralSymmetry3(line6.point, axis);
+        line6.vector.multiplyScalar(-1);
+        return line6;
       }
-      function pointRotation3(point10, center, angle2) {
-        return point10.sub(center).rotate(angle2).add(center);
+      function pointRotation3(point10, center, angle) {
+        return point10.sub(center).rotate(angle).add(center);
       }
-      function circleRotation3(circle7, center, angle2) {
-        pointRotation3(circle7.center, center, angle2);
-        return circle7;
+      function circleRotation3(circle6, center, angle) {
+        pointRotation3(circle6.center, center, angle);
+        return circle6;
       }
-      function lineRotation3(line7, center, angle2) {
-        pointRotation3(line7.point, center, angle2);
-        line7.vector.rotate(angle2);
-        return line7;
+      function lineRotation3(line6, center, angle) {
+        pointRotation3(line6.point, center, angle);
+        line6.vector.rotate(angle);
+        return line6;
       }
       function pointHomothecy3(point10, center, scale) {
         return point10.sub(center).multiplyScalar(scale);
       }
-      function circleHomotecy(circle7, center, scale) {
-        pointHomothecy3(circle7.center, center, scale);
-        circle7.radius *= scale;
-        return circle7;
+      function circleHomotecy(circle6, center, scale) {
+        pointHomothecy3(circle6.center, center, scale);
+        circle6.radius *= scale;
+        return circle6;
       }
-      function lineHomotecy(line7, center, scale) {
-        pointHomothecy3(line7.point);
-        line7.vector.multiplyScalar(scale);
-        return line7;
+      function lineHomotecy(line6, center, scale) {
+        pointHomothecy3(line6.point);
+        line6.vector.multiplyScalar(scale);
+        return line6;
       }
 
       // src/maths/index.js
@@ -638,9 +638,9 @@
         }
         ctx.restore();
       }
-      function drawCircle(stage2, circle7) {
-        const c = circle7.geom.center;
-        const r = circle7.geom.radius;
+      function drawCircle(stage2, circle6) {
+        const c = circle6.geom.center;
+        const r = circle6.geom.radius;
         const ctx = stage2.ctx;
         ctx.beginPath();
         ctx.save();
@@ -650,7 +650,7 @@
         ctx.arc(c.x, c.y, r, 0, 2 * Math.PI);
         ctx.restore();
         ctx.save();
-        const style = circle7.style;
+        const style = circle6.style;
         if (style.stroke !== void 0) {
           ctx.strokeStyle = style.stroke.toString();
           if (style.dash !== void 0) {
@@ -664,10 +664,10 @@
         }
         ctx.restore();
       }
-      function drawSegment(stage2, segment4) {
+      function drawSegment(stage2, segment5) {
         const ctx = stage2.ctx;
-        const p1 = segment4.geom.p1;
-        const p2 = segment4.geom.p2;
+        const p1 = segment5.geom.p1;
+        const p2 = segment5.geom.p2;
         ctx.beginPath();
         ctx.save();
         ctx.translate(stage2.translation.x, stage2.translation.y);
@@ -675,7 +675,7 @@
         ctx.moveTo(p1.x, p1.y);
         ctx.lineTo(p2.x, p2.y);
         ctx.restore();
-        const style = segment4.style;
+        const style = segment5.style;
         ctx.save();
         if (style.stroke !== void 0) {
           ctx.strokeStyle = style.stroke.toString();
@@ -686,8 +686,8 @@
         }
         ctx.restore();
       }
-      function drawLine(stage2, line7) {
-        const l = line7.geom;
+      function drawLine(stage2, line6) {
+        const l = line6.geom;
         const ctx = stage2.ctx;
         ctx.beginPath();
         const w = stage2.window;
@@ -702,7 +702,7 @@
           ctx.lineTo(w.x + w.width, l.getYFromX(w.x + w.width));
         }
         ctx.restore();
-        const style = line7.style;
+        const style = line6.style;
         ctx.save();
         if (style.stroke !== void 0) {
           ctx.strokeStyle = style.stroke.toString();
@@ -924,32 +924,44 @@
           geom.set(point10.geom, vector4.geom);
         }
       }));
-      const perpendicular = makeTypedFunction([lineType, pointType], (line7, point10) => {
+      const perpendicular = makeTypedFunction([lineType, pointType], (line6, point10) => {
         return {
           ...baseLine(),
           description: "line from (point, vector)",
           input: {
-            line: line7,
+            line: line6,
             point: point10
           },
           update({geom}) {
             geom.point.copy(point10.geom);
-            const lv = line7.geom.vector;
+            const lv = line6.geom.vector;
             geom.vector.set(-lv.y, lv.x);
           }
         };
       });
-      const segmentBissector = makeTypedFunction([segmentType], (segment4) => ({
+      const segmentBissector = makeTypedFunction([segmentType], (segment5) => ({
         description: "segment bissector",
         ...baseLine(),
         input: {
-          segment: segment4
+          segment: segment5
         },
         update({geom}) {
-          const p1 = segment4.geom.p1;
-          const p2 = segment4.geom.p2;
+          const p1 = segment5.geom.p1;
+          const p2 = segment5.geom.p2;
           geom.point.lerp(p1, p2, 0.5);
           geom.vector.set(p1.y - p2.y, p2.x - p1.x);
+        }
+      }));
+      const bissectorPointPoint = makeTypedFunction([pointType, pointType], (p1, p2) => ({
+        description: "bissector point point",
+        ...baseLine(),
+        input: {
+          p1,
+          p2
+        },
+        update({geom}) {
+          geom.point.lerp(p1.geom, p2.geom, 0.5);
+          geom.vector.set(p1.geom.y - p2.geom.y, p2.geom.x - p1.geom.x);
         }
       }));
       const angleBissector = makeTypedFunction([pointType, pointType, pointType], (p1, p2, p3) => {
@@ -974,62 +986,62 @@
           }
         };
       });
-      const lineCentralSymmetry = makeTypedFunction([lineType, pointType], (line7, center) => ({
+      const lineCentralSymmetry = makeTypedFunction([lineType, pointType], (line6, center) => ({
         ...baseLine(),
         description: "line central symmetry",
         input: {
-          line: line7,
+          line: line6,
           center
         },
         update({geom}) {
-          index2.lineCentralSymmetry(geom.copy(line7.geom), center);
+          index2.lineCentralSymmetry(geom.copy(line6.geom), center);
         }
       }));
-      const lineAxialSymmetry = makeTypedFunction([lineType, lineType], (line7, axis) => ({
+      const lineAxialSymmetry = makeTypedFunction([lineType, lineType], (line6, axis) => ({
         ...baseLine(),
         description: "line axial symmetry",
         input: {
-          line: line7,
+          line: line6,
           axis
         },
         update({geom}) {
-          index2.lineAxialSymmetry(geom.copy(line7.geom), axis);
+          index2.lineAxialSymmetry(geom.copy(line6.geom), axis);
         }
       }));
-      const lineTranslation = makeTypedFunction([lineType, vectorType], (line7, vector4) => ({
+      const lineTranslation = makeTypedFunction([lineType, vectorType], (line6, vector4) => ({
         ...baseLine(),
         description: "line translation",
         input: {
-          line: line7,
+          line: line6,
           vector: vector4
         },
         update({geom}) {
-          geom.copy(line7.geom);
+          geom.copy(line6.geom);
           geom.point.sub(vector4.geom.p1).add(vector4.geom.p2);
         }
       }));
-      const lineRotation = makeTypedFunction([lineType, pointType, scalarType], (line7, center, angle2) => ({
+      const lineRotation = makeTypedFunction([lineType, pointType, scalarType], (line6, center, angle) => ({
         ...baseLine(),
         description: "line rotation",
         input: {
-          line: line7,
+          line: line6,
           center,
-          angle: angle2
+          angle
         },
         update({geom}) {
-          index2.lineRotation(geom.copy(line7.geom), center.geom, angle2);
+          index2.lineRotation(geom.copy(line6.geom), center.geom, angle);
         }
       }));
-      const lineHomothecy = makeTypedFunction([lineType, pointType, scalarType], (line7, center, scale) => ({
+      const lineHomothecy = makeTypedFunction([lineType, pointType, scalarType], (line6, center, scale) => ({
         ...baseLine(),
         description: "line homotecy",
         input: {
-          line: line7,
+          line: line6,
           center,
           scale
         },
         update({geom}) {
-          index2.lineHomothecy(geom.copy(line7.geom), center.geom, scale);
+          index2.lineHomothecy(geom.copy(line6.geom), center.geom, scale);
         }
       }));
       function line3(a, b) {
@@ -1153,21 +1165,21 @@
       const randomPoint = (area) => {
         return point6(area.x + Math.random() * area.width, area.y + Math.random() * area.height);
       };
-      const middle = makeTypedFunction([segmentType], (segment4) => ({
+      const middle = makeTypedFunction([segmentType], (segment5) => ({
         description: "segment middle",
         ...basePoint(),
         input: {
-          segment: segment4
+          segment: segment5
         },
         update({input, geom}) {
           geom.lerp(input.segment.geom.p1, input.segment.geom.p2, 0.5);
         }
       }));
-      const pointOnPerpendicular = makeTypedFunction([lineType, pointType], (line7, point10) => ({
+      const pointOnPerpendicular = makeTypedFunction([lineType, pointType], (line6, point10) => ({
         description: "point on perpendicular",
         ...basePoint(),
         input: {
-          line: line7,
+          line: line6,
           point: point10
         },
         update({input, geom}) {
@@ -1218,16 +1230,16 @@
           }
         };
       });
-      const lineCircleIntersections = makeTypedFunction([lineType, circleType], (line7, circle7) => {
+      const lineCircleIntersections = makeTypedFunction([lineType, circleType], (line6, circle6) => {
         return {
           description: "line circle intersections",
           input: {
-            line: line7,
-            circle: circle7
+            line: line6,
+            circle: circle6
           },
           output: [basePoint(), basePoint()],
           update({output}) {
-            index2.lineCircleIntersection(line7.geom, circle7.geom, output[0].geom, output[1].geom);
+            index2.lineCircleIntersection(line6.geom, circle6.geom, output[0].geom, output[1].geom);
           }
         };
       });
@@ -1270,41 +1282,41 @@
           }
         };
       });
-      const pointOnLine = makeTypedFunction([lineType, untyped], (line7, position) => {
+      const pointOnLine = makeTypedFunction([lineType, untyped], (line6, position) => {
         const pt = basePoint();
         pt.geom.copy(position);
         return {
           ...pt,
           description: "point on line",
           input: {
-            line: line7
+            line: line6
           },
           update({geom}) {
-            index2.projectVectorOnLine(geom, line7.geom);
+            index2.projectVectorOnLine(geom, line6.geom);
           }
         };
       });
-      const pointOnCircle = makeTypedFunction([circleType, untyped], (circle7, position) => {
+      const pointOnCircle = makeTypedFunction([circleType, untyped], (circle6, position) => {
         const pt = basePoint();
         pt.geom.copy(position);
         return {
           ...pt,
           description: "point on circle",
           input: {
-            circle: circle7
+            circle: circle6
           },
           update({geom}) {
-            index2.projectVectorOnCircle(geom, circle7.geom, geom);
+            index2.projectVectorOnCircle(geom, circle6.geom, geom);
           }
         };
       });
-      const mouse = (stage2, mouse5) => ({
+      const mouse = (stage2, mouse7) => ({
         ...basePoint(),
         selectable: false,
         description: "mouse",
         input: {},
         update({geom}) {
-          geom.copy(mouse5.position);
+          geom.copy(mouse7.position);
         }
       });
       const pointCentralSymmetry = makeTypedFunction([pointType, pointType], (point10, center) => ({
@@ -1340,16 +1352,16 @@
           geom.copy(point10.geom).sub(vector4.geom.p1).add(vector4.geom.p2);
         }
       }));
-      const pointRotation = makeTypedFunction([pointType, pointType, scalarType], (point10, center, angle2) => ({
+      const pointRotation = makeTypedFunction([pointType, pointType, scalarType], (point10, center, angle) => ({
         ...basePoint(),
         description: "point rotation",
         input: {
           point: point10,
           center,
-          angle: angle2
+          angle
         },
         update({geom}) {
-          index2.pointRotation(geom.copy(point10.geom), center.geom, angle2);
+          index2.pointRotation(geom.copy(point10.geom), center.geom, angle);
         }
       }));
       const pointHomothecy = makeTypedFunction([pointType, pointType, scalarType], (point10, center, scale) => ({
@@ -1372,25 +1384,25 @@
       const pointOnObject = makeDispatch(makeTypedFunction([pointType, untyped], (_) => _), pointOnCircle, pointOnLine);
 
       // src/api/selection.js
-      function selectInCircle(objects, circle7) {
+      function selectInCircle(objects, circle6) {
         const result = [];
         objects.forEach((object) => {
           if (object.selectable === false) {
             return;
           }
           if (Array.isArray(object)) {
-            result.push(...selectInCircle(object, circle7));
+            result.push(...selectInCircle(object, circle6));
           } else {
             let distance2;
             switch (object.type) {
               case pointType:
-                distance2 = index2.vectorsDistance(circle7.center, object.geom);
+                distance2 = index2.vectorsDistance(circle6.center, object.geom);
                 break;
               case lineType:
-                distance2 = index2.vectorLineDistance(circle7.center, object.geom);
+                distance2 = index2.vectorLineDistance(circle6.center, object.geom);
                 break;
               case circleType:
-                distance2 = index2.vectorCircleDistance(circle7.center, object.geom);
+                distance2 = index2.vectorCircleDistance(circle6.center, object.geom);
                 break;
               default:
                 console.warn("type not handled : " + object.type);
@@ -1403,7 +1415,7 @@
             });
           }
         });
-        return result.filter((o) => Math.abs(o.distance) < circle7.radius);
+        return result.filter((o) => Math.abs(o.distance) < circle6.radius);
       }
 
       // src/constructions/circle.js
@@ -1483,40 +1495,40 @@
           index2.circleCentralSymmetry(geom.copy(c.geom), center.geom);
         }
       }));
-      const circleTranslation = makeTypedFunction([circleType, vectorType], (circle7, vector4) => ({
+      const circleTranslation = makeTypedFunction([circleType, vectorType], (circle6, vector4) => ({
         ...baseCircle(),
         description: "circle translation",
         input: {
-          circle: circle7,
+          circle: circle6,
           vector: vector4
         },
         update({geom}) {
-          geom.copy(circle7.geom);
+          geom.copy(circle6.geom);
           geom.center.sub(vector4.geom.p1).add(vector4.geom.p2);
         }
       }));
-      const circleRotation = makeTypedFunction([circleType, pointType, scalarType], (circle7, center, angle2) => ({
+      const circleRotation = makeTypedFunction([circleType, pointType, scalarType], (circle6, center, angle) => ({
         ...baseCircle(),
         description: "circle rotation",
         input: {
-          circle: circle7,
+          circle: circle6,
           center,
-          angle: angle2
+          angle
         },
         update({geom}) {
-          index2.circleRotation(geom.copy(circle7.geom), center.geom, angle2);
+          index2.circleRotation(geom.copy(circle6.geom), center.geom, angle);
         }
       }));
-      const circleHomothecy = makeTypedFunction([circleType, pointType, scalarType], (circle7, center, scale) => ({
+      const circleHomothecy = makeTypedFunction([circleType, pointType, scalarType], (circle6, center, scale) => ({
         ...baseCircle(),
         description: "circle homotecy",
         input: {
-          circle: circle7,
+          circle: circle6,
           center,
           scale
         },
         update({geom}) {
-          index2.circleHomothecy(geom.copy(circle7.geom), center.geom, scale);
+          index2.circleHomothecy(geom.copy(circle6.geom), center.geom, scale);
         }
       }));
       const circle2 = makeDispatch(circumCircle, circleFromCenterPoint, circleFromCenterRadius);
@@ -1640,6 +1652,7 @@
         basePolygon: () => basePolygon,
         baseSegment: () => baseSegment,
         baseVector: () => baseVector,
+        bissectorPointPoint: () => bissectorPointPoint,
         circle: () => circle2,
         circleAxialSymmetry: () => circleAxialSymmetry,
         circleCentralSymmetry: () => circleCentralSymmetry,
@@ -2087,9 +2100,9 @@
 
       // src/gui/commands/SelectOrCreatePoint.js
       class SelectOrCreatePoint2 {
-        constructor(stage2, mouse5) {
+        constructor(stage2, mouse7) {
           this.stage = stage2;
-          this.mouse = mouse5;
+          this.mouse = mouse7;
           this.selectionCircle = new index2.Circle(void 0, 5);
           this.completed = new Signal2();
         }
@@ -2137,10 +2150,10 @@
 
       // src/gui/commands/CircleCenterPoint.js
       class CircleCenterPoint3 {
-        constructor(stage2, mouse5) {
+        constructor(stage2, mouse7) {
           this.completed = new Signal2();
           this.stage = stage2;
-          this.mouse = mouse5;
+          this.mouse = mouse7;
         }
         enable() {
           this.centerCommand = new SelectOrCreatePoint2(this.stage, this.mouse);
@@ -2205,10 +2218,10 @@
 
       // src/gui/commands/LinePointPoint.js
       class LinePointPoint3 {
-        constructor(stage2, mouse5) {
+        constructor(stage2, mouse7) {
           this.completed = new Signal2();
           this.stage = stage2;
-          this.mouse = mouse5;
+          this.mouse = mouse7;
         }
         enable() {
           this.p1Command = new SelectOrCreatePoint2(this.stage, this.mouse);
@@ -2271,11 +2284,147 @@
         }
       }
 
+      // src/gui/commands/SegmentPointPoint.js
+      class SegmentPointPoint3 {
+        constructor(stage2, mouse7) {
+          this.completed = new Signal2();
+          this.stage = stage2;
+          this.mouse = mouse7;
+        }
+        enable() {
+          this.p1Command = new SelectOrCreatePoint2(this.stage, this.mouse);
+          this.p1Command.enable();
+          this.p1Command.completed.add(this.onP1, this);
+          this.pointCommand = this.p1Command;
+        }
+        disable() {
+          this.p1Command.completed.remove(this.onP1, this);
+          if (this.p2Command) {
+            this.p2Command.completed.remove(this.onP2, this);
+          }
+          this.pointCommand.disable();
+        }
+        onP1(p1) {
+          this.p1 = p1;
+          this.tempP2 = index.mouse(this.stage, this.mouse);
+          this.tempSegment = index.segment(this.p1, this.tempP2);
+          this.tempSegment.selectable = false;
+          this.p1.selectable = false;
+          this.tempP2.selectable = false;
+          this.stage.add(this.tempSegment);
+          this.stage.add(this.tempP2);
+          this.p1Command.completed.remove(this.onP1, this);
+          this.p1Command.disable();
+          this.p2Command = new SelectOrCreatePoint2(this.stage, this.mouse);
+          this.p2Command.enable();
+          this.p2Command.completed.add(this.onP2, this);
+          this.pointCommand = this.p2Command;
+        }
+        onP2(p2) {
+          this.p2 = p2;
+          this.p2Command.completed.remove(this.onP2, this);
+          this.p2Command.disable();
+          this.stage.remove(this.tempP2);
+          this.stage.remove(this.tempSegment);
+          this.segment = index.segment(this.p1, this.p2);
+          this.stage.add(this.segment);
+          this.p1.selectable = true;
+          this.p2.selectable = true;
+          this.completed.dispatch(this.segment);
+        }
+        cancel() {
+          if (this.p1) {
+            this.p1Command.undo();
+            this.stage.remove(this.tempSegment);
+            this.p2Command.completed.remove(this.onP1, this);
+            this.p2Command.disable();
+          }
+        }
+        undo() {
+          this.p1Command.undo();
+          this.p2Command.undo();
+          this.stage.remove(this.segment);
+        }
+        redo() {
+          this.p1Command.redo();
+          this.p2Command.redo();
+          this.stage.add(this.segment);
+        }
+      }
+
+      // src/gui/commands/BissectorPointPoint.js
+      class BissectorPointPoint3 {
+        constructor(stage2, mouse7) {
+          this.completed = new Signal2();
+          this.stage = stage2;
+          this.mouse = mouse7;
+        }
+        enable() {
+          this.p1Command = new SelectOrCreatePoint2(this.stage, this.mouse);
+          this.p1Command.enable();
+          this.p1Command.completed.add(this.onP1, this);
+          this.pointCommand = this.p1Command;
+        }
+        disable() {
+          this.p1Command.completed.remove(this.onP1, this);
+          if (this.p2Command) {
+            this.p2Command.completed.remove(this.onP2, this);
+          }
+          this.pointCommand.disable();
+        }
+        onP1(p1) {
+          this.p1 = p1;
+          this.tempP2 = index.mouse(this.stage, this.mouse);
+          this.tempBissector = index.bissectorPointPoint(this.p1, this.tempP2);
+          this.tempBissector.selectable = false;
+          this.p1.selectable = false;
+          this.tempP2.selectable = false;
+          this.stage.add(this.tempBissector);
+          this.stage.add(this.tempP2);
+          this.p1Command.completed.remove(this.onP1, this);
+          this.p1Command.disable();
+          this.p2Command = new SelectOrCreatePoint2(this.stage, this.mouse);
+          this.p2Command.enable();
+          this.p2Command.completed.add(this.onP2, this);
+          this.pointCommand = this.p2Command;
+        }
+        onP2(p2) {
+          this.p2 = p2;
+          this.p2Command.completed.remove(this.onP2, this);
+          this.p2Command.disable();
+          this.stage.remove(this.tempP2);
+          this.stage.remove(this.tempBissector);
+          this.bissector = index.bissectorPointPoint(this.p1, this.p2);
+          this.stage.add(this.bissector);
+          this.p1.selectable = true;
+          this.p2.selectable = true;
+          this.completed.dispatch(this.bissector);
+        }
+        cancel() {
+          if (this.p1) {
+            this.p1Command.undo();
+            this.stage.remove(this.tempBissector);
+            this.p2Command.completed.remove(this.onP1, this);
+            this.p2Command.disable();
+          }
+        }
+        undo() {
+          this.p1Command.undo();
+          this.p2Command.undo();
+          this.stage.remove(this.bissector);
+        }
+        redo() {
+          this.p1Command.redo();
+          this.p2Command.redo();
+          this.stage.add(this.bissector);
+        }
+      }
+
       // src/gui/commands/DragPoint.js
       class DragPoint3 {
-        constructor(stage2, mouse5) {
+        constructor(stage2, mouse7) {
           this.stage = stage2;
-          this.mouse = mouse5;
+          this.mouse = mouse7;
           this.selectionCircle = new index2.Circle(void 0, 5);
           this.completed = new Signal2();
           this.originalPos = new index2.Vector2();
@@ -2366,11 +2515,11 @@
 
       // src/gui/commands/DragStage.js
       class DragStage3 {
-        constructor(stage2, mouse5) {
+        constructor(stage2, mouse7) {
           this.completed = new Signal2();
           this.stage = stage2;
           this.window = this.stage.window;
-          this.mouse = mouse5;
+          this.mouse = mouse7;
           this.mouseLastPos = new index2.Vector2();
           this.mouseBeginPos = new index2.Vector2();
           this.windowBeginPos = new index2.Vector2();
@@ -2428,18 +2577,20 @@
       // src/gui/commands/index.js
       var index4 = {};
       __export(index4, {
+        BissectorPointPoint: () => BissectorPointPoint3,
         CircleCenterPoint: () => CircleCenterPoint3,
         DragPoint: () => DragPoint3,
         DragStage: () => DragStage3,
         LinePointPoint: () => LinePointPoint3,
+        SegmentPointPoint: () => SegmentPointPoint3,
         SelectOrCreatePoint: () => SelectOrCreatePoint2
       });
 
       // src/gui/Tool.js
       class Tool2 {
-        constructor(stage2, mouse5, commandClass, description, icon) {
+        constructor(stage2, mouse7, commandClass, description, icon) {
           this.stage = stage2;
-          this.mouse = mouse5;
+          this.mouse = mouse7;
           this.commandClass = commandClass;
           this.description = description;
           this.icon = icon;
@@ -2535,7 +2686,7 @@
           this.mouseCircle = index.circle(this.mouse, radius);
           this.mouseCircle.selectable = false;
           this.stage.add(this.mouseCircle);
-          let selector = new ToolsSelector2([new Tool2(this.stage, this.mouseController, index4.DragPoint, "drag point", "icon"), new Tool2(this.stage, this.mouseController, index4.LinePointPoint, "create line", "icon"), new Tool2(this.stage, this.mouseController, index4.CircleCenterPoint, "create circle", "icon"), new Tool2(this.stage, this.mouseController, index4.DragStage, "drag", "icon")]);
+          let selector = new ToolsSelector2([new Tool2(this.stage, this.mouseController, index4.DragPoint, "drag point", "icon"), new Tool2(this.stage, this.mouseController, index4.LinePointPoint, "create line", "icon"), new Tool2(this.stage, this.mouseController, index4.SegmentPointPoint, "create segment", "icon"), new Tool2(this.stage, this.mouseController, index4.BissectorPointPoint, "create bissector", "icon"), new Tool2(this.stage, this.mouseController, index4.CircleCenterPoint, "create circle", "icon"), new Tool2(this.stage, this.mouseController, index4.DragStage, "drag", "icon")]);
           selector.buildList();
           selector.enable();
           this.domElement = document.createElement("div");
@@ -2611,41 +2762,9 @@
       let origin = index.point(0, 0);
       stage.add(index.vector(origin, index.point(1, 0)));
       stage.add(index.vector(origin, index.point(0, 1)));
-      const angle = index.scalar(Math.random() * 2 * Math.PI);
-      {
-        const pt = gui.ranPt();
-        stage.add(pt);
-        const circleCenter = gui.ranPt();
-        const circle7 = index.circle(circleCenter, gui.ranPt());
-        stage.add(circleCenter, circle7);
-        const linePt = gui.ranPt();
-        const line7 = index.line(linePt, gui.ranPt());
-        stage.add(linePt, line7);
-        {
-          const center = gui.ranPt();
-          center.style.fill = "blue";
-          stage.add(center);
-          const rotPt = index.rotate(pt, center, angle);
-          rotPt.style.fill = "red";
-          const rcp = index.circle(center, pt);
-          rcp.style.stroke = "blue";
-          const rotCircle = index.rotate(circle7, center, angle);
-          rotCircle.style.stroke = "red";
-          const rcc = index.circle(center, circleCenter);
-          rcc.style.stroke = "blue";
-          const rotLine = index.rotate(line7, center, angle);
-          rotLine.style.stroke = "red";
-          const rcl = index.circle(center, linePt);
-          rcl.style.stroke = "blue";
-          stage.add(rcp, rcc, rcl);
-          stage.add(rotPt, rotCircle, rotLine);
-        }
-      }
-      gui.start(() => {
-        angle.value = angle.value + 0.1 * Math.PI;
-      });
+      gui.start();
     }
   };
-  return __require(27);
+  return __require(29);
 })();
 //# sourceMappingURL=app.js.map
