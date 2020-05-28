@@ -43,7 +43,7 @@ export class SelectOrCreatePoint{
         if(this.pointCreated){
             this.stage.add(this.point);
         }
-        this.completed.dispatch(this.point, this.pointCreated);
+        this.completed.dispatch(this.point);
     }
 
     cancel(){
