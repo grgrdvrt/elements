@@ -136,11 +136,10 @@ export const circlesIntersections = makeTypedFunction(
                 maths.circlesIntersections(c1.geom, c2.geom, output[0].geom, output[1].geom);
             }
         };
-        result.output = [basePoint(), basePoint()].map(p => ({
+        return [basePoint(), basePoint()].map(p => ({
             ...p,
             description:"circles intersection",
             input:{c1, c2},
-            helpers:{result}
         }));
         return result;
     }
@@ -154,12 +153,20 @@ export const linesIntersection = makeTypedFunction(
         return {
             ...pt,
             description:"lines intersection",
+            output:{},
             input:{l1, l2},
             update({geom}){
                 maths.linesIntersection(l1.geom, l2.geom, geom);
             }
         };
     }
+);
+
+
+export const intersection = makeDispatch(
+    lineCircleIntersections,
+    circlesIntersections,
+    linesIntersection
 );
 
 

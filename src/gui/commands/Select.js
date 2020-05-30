@@ -5,16 +5,22 @@ import Signal from "../../utils/Signal";
 
 
 //WIP
-function getIntersections(objs){
+function getClosestIntersection(objs){
     const nObjs = objs.length;
+    const minDist = Number.POSITIVE_INFINITY;
+    const selectedIntersection = undefined;
     for(let i = 0; i < nObjs; i++){
         const o1 = objs[i];
         for(let j = i + 1; j < nObjs; j++){
             const o2 = objs[i];
-            if(o1.type === api.lineType && o2.type === api.lineType){
+            const inter = api.intersection(o1, o2);
+            inter.update(inter);
+            if(inter.isValid){
+
             }
         }
     }
+    return selectedIntersection;
 }
 
 export class SelectObjectOrCreatePoint{

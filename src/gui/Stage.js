@@ -29,13 +29,8 @@ export class Stage {
             if(this.items.indexOf(item) !== -1){
                 return;
             }
-            if(item.output){
-                if(Array.isArray(item.output)){
-                    this.add(...item.output);
-                }
-                else{
-                    this.add(...Object.values(item.output));
-                }
+            if(Array.isArray(item)){
+                this.add(...item);
             }
             else{
                 this.items.push(item);

@@ -7,29 +7,29 @@ document.body.appendChild(gui.domElement);
 const stage = gui.stage;
 
 /** circum circle **/
-// const t1 = gui.ranPt();
-// const t2 = gui.ranPt();
-// const t3 = gui.ranPt();
-// stage.add(t1, t2, t3);
+const t1 = gui.ranPt();
+const t2 = gui.ranPt();
+const t3 = gui.ranPt();
+stage.add(t1, t2, t3);
 
-// const s1 = api.segment(t1, t2);
-// const s2 = api.segment(t1, t3);
-// const s3 = api.segment(t2, t3);
-// stage.add(s1, s2, s3);
+const s1 = api.segment(t1, t2);
+const s2 = api.segment(t1, t3);
+const s3 = api.segment(t2, t3);
+stage.add(s1, s2, s3);
 
-// const m1 = api.segmentBissector(s1);
-// const m2 = api.segmentBissector(s2);
-// const m3 = api.segmentBissector(s3);
-// stage.add(m1, m2, m3);
+const m1 = api.segmentBissector(s1);
+const m2 = api.segmentBissector(s2);
+const m3 = api.segmentBissector(s3);
+stage.add(m1, m2, m3);
 
-// stage.add(
-//   api.middle(s1),
-//   api.middle(s2),
-//   api.middle(s3)
-// );
+stage.add(
+  api.middle(s1),
+  api.middle(s2),
+  api.middle(s3)
+);
 
-// stage.add(api.linesIntersection(m1, m3));
-// stage.add(api.circle(t1, t2, t3));
+stage.add(api.intersection(m1, m3));
+stage.add(api.circle(t1, t2, t3));
 
 // stage.add(api.functionGraph(x => Math.cos(x)));
 // stage.add(api.functionGraph(x => Math.tan(x)));
@@ -71,6 +71,7 @@ stage.add(api.vector(origin, api.point(0, 1)));
 // let p2 = gui.ranPt();
 // let ci = api.circle(p1, p2);
 // stage.add(p1, p2, ci);
+``
 
 /**VARIGNON**/
 // let pa = gui.ranPt();
