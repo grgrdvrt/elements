@@ -113,14 +113,16 @@ export const circumCenter = makeTypedFunction(
 export const lineCircleIntersections = makeTypedFunction(
     [lineType, circleType],
     (line, circle) => {
-        return {
-            description:"line circle intersections",
+        const pts = [basePoint(), basePoint()];
+        return pts.map(p => ({
+            ...p,
+            description:"line circle intersection",
             input:{line, circle},
-            output : [basePoint(), basePoint()],
-            update({output}){
-                maths.lineCircleIntersection(line.geom, circle.geom, output[0].geom, output[1].geom);
+            update({}, timestamp){
+                maths.lineCircleIntersection(line.geom, circle.geom, pts[0].geom, pts[1].geom);
+                pts[0].lastUpdated = pts[1].lastUpdated = timestamp;
             }
-        };
+        }));
     }
 );
 
@@ -128,20 +130,16 @@ export const lineCircleIntersections = makeTypedFunction(
 export const circlesIntersections = makeTypedFunction(
     [circleType, circleType],
     (c1, c2) => {
-        const result = {
-            description:"circles intersections",
-            input:{c1, c2},
-            type : listType(pointType),
-            update({output}){
-                maths.circlesIntersections(c1.geom, c2.geom, output[0].geom, output[1].geom);
-            }
-        };
-        return [basePoint(), basePoint()].map(p => ({
+        const pts = [basePoint(), basePoint()];
+        return pts.map(p => ({
             ...p,
             description:"circles intersection",
             input:{c1, c2},
+            update({}, timestamp){
+                maths.circlesIntersections(c1.geom, c2.geom, pts[0].geom, pts[1].geom);
+                pts[0].lastUpdated = pts[1].lastUpdated = timestamp;
+            }
         }));
-        return result;
     }
 );
 
@@ -153,7 +151,6 @@ export const linesIntersection = makeTypedFunction(
         return {
             ...pt,
             description:"lines intersection",
-            output:{},
             input:{l1, l2},
             update({geom}){
                 maths.linesIntersection(l1.geom, l2.geom, geom);

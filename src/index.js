@@ -29,7 +29,13 @@ stage.add(
 );
 
 stage.add(api.intersection(m1, m3));
-stage.add(api.circle(t1, t2, t3));
+const circum = api.circle(t1, t2, t3);
+stage.add(circum);
+
+const p1 = gui.ranPt();
+const p2 = gui.ranPt();
+const l = api.line(p1, p2);
+stage.add(p1, p2, l, api.intersection(l, circum));
 
 // stage.add(api.functionGraph(x => Math.cos(x)));
 // stage.add(api.functionGraph(x => Math.tan(x)));
