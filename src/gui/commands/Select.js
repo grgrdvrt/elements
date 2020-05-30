@@ -5,22 +5,35 @@ import Signal from "../../utils/Signal";
 
 
 //WIP
-function getClosestIntersection(objs){
+function getIntersections(objs){
     const nObjs = objs.length;
-    const minDist = Number.POSITIVE_INFINITY;
-    const selectedIntersection = undefined;
+    const intersections = [];
     for(let i = 0; i < nObjs; i++){
         const o1 = objs[i];
         for(let j = i + 1; j < nObjs; j++){
             const o2 = objs[i];
             const inter = api.intersection(o1, o2);
-            inter.update(inter);
-            if(inter.isValid){
-
+            if(Array.isArray(inter)){
+                intersections.push(...inter);
+            }
+            else{
+                intersections.push(inter);
             }
         }
     }
-    return selectedIntersection;
+    return intersections;
+}
+
+function getClosest(items){
+    let result = undefined;
+    let minDist = Number.POSITIVE_INFINITY;
+    for(let item of items){
+        if(item.distance < minDist){
+            result = item;
+            minDist = item.distance;
+        }
+    }
+    return result;
 }
 
 export class SelectObjectOrCreatePoint{
@@ -65,8 +78,7 @@ export class SelectObjectOrCreatePoint{
             if(pointRequested){
                 const pointsInSelection = selection.filter(item => item.object.type === api.pointType);
                 if(pointsInSelection.length > 0){
-                    pointsInSelection.sort((a, b) => Math.abs(b.distance) - Math.abs(a.distance));
-                    this.object = pointsInSelection[0].object;
+                    this.object = getClosest(pointsInSelection).object;
                 }
                 else{
                     const objects = selection.filter(item => this.types.indexOf(item.object.type) !== -1);
@@ -77,8 +89,12 @@ export class SelectObjectOrCreatePoint{
                             this.object = api.pointOnObject(closestObject, this.selectionCircle.center);
                         }
                         else{
-                            //sort intersections
-                            this.object = null;
+                            this.object = getClosest(intersections.filter(inter => {
+                                return inter.update(inter) !== false;
+                            }).map(inter => ({
+                                distance:maths.Vector2.dist(this.selectionCircle.center, inter.geom),
+                                object:inter
+                            }))).object;
                         }
                     }
                     else{

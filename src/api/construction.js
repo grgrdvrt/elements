@@ -2,9 +2,12 @@ export function updateObject(object, timeStamp){
     if(object.lastUpdated >= timeStamp){
         return;
     }
+    let isValid = true;
     if(object.input){
         for(let key in object.input){
-            updateObject(object.input[key], timeStamp);
+            const input = object.input[key];
+            updateObject(input, timeStamp);
+            isValid = input.isValid && isValid;
         }
     }
     if(object.helpers){
@@ -12,8 +15,10 @@ export function updateObject(object, timeStamp){
             updateObject(object.helpers[key], timeStamp);
         }
     }
-    if(object.update){
-        object.update(object, timeStamp);
+    if(object.update && isValid){
+        const updateResponse = object.update(object, timeStamp);
+        isValid = updateResponse !== false;
     }
+    object.isValid = isValid;
     object.lastUpdated = timeStamp;
 }

@@ -119,8 +119,12 @@ export const lineCircleIntersections = makeTypedFunction(
             description:"line circle intersection",
             input:{line, circle},
             update({}, timestamp){
-                maths.lineCircleIntersection(line.geom, circle.geom, pts[0].geom, pts[1].geom);
                 pts[0].lastUpdated = pts[1].lastUpdated = timestamp;
+                const hasIntersection = maths.lineCircleDistance(line, circle) <= circle.geom.radius;
+                if(hasIntersection){
+                    maths.lineCircleIntersection(line.geom, circle.geom, pts[0].geom, pts[1].geom);
+                }
+                return hasIntersection;
             }
         }));
     }
@@ -135,9 +139,17 @@ export const circlesIntersections = makeTypedFunction(
             ...p,
             description:"circles intersection",
             input:{c1, c2},
-            update({}, timestamp){
-                maths.circlesIntersections(c1.geom, c2.geom, pts[0].geom, pts[1].geom);
+            update({input}, timestamp){
                 pts[0].lastUpdated = pts[1].lastUpdated = timestamp;
+                const r1 = c1.geom.radius;
+                const r2 = c2.geom.radius;
+                const d = maths.Vector2.dist(c1.geom.center, c2.geom.center);
+                const hasIntersection = d < r1 + r2 && d > Math.abs(r1 - r2);
+                pts[0].isValid = pts[1].isValid = hasIntersection;
+                if(!hasIntersection){
+                    maths.circlesIntersections(c1.geom, c2.geom, pts[0].geom, pts[1].geom);
+                }
+                return hasIntersection;
             }
         }));
     }
@@ -147,13 +159,16 @@ export const circlesIntersections = makeTypedFunction(
 export const linesIntersection = makeTypedFunction(
     [lineType, lineType],
     (l1, l2) => {
-        const pt = basePoint();
         return {
-            ...pt,
+            ...basePoint(),
             description:"lines intersection",
             input:{l1, l2},
             update({geom}){
-                maths.linesIntersection(l1.geom, l2.geom, geom);
+                const hasIntersection = l1.geom.vector.cross(l2.geom.vector) !== 0;
+                if(hasIntersection){
+                    maths.linesIntersection(l1.geom, l2.geom, geom);
+                }
+                return hasIntersection;
             }
         };
     }
