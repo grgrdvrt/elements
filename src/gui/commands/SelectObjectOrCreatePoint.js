@@ -11,7 +11,7 @@ function getIntersections(objs){
     for(let i = 0; i < nObjs; i++){
         const o1 = objs[i];
         for(let j = i + 1; j < nObjs; j++){
-            const o2 = objs[i];
+            const o2 = objs[j];
             const inter = api.intersection(o1, o2);
             if(Array.isArray(inter)){
                 intersections.push(...inter);
@@ -37,9 +37,10 @@ function getClosest(items){
 }
 
 export class SelectObjectOrCreatePoint{
-    constructor(stage, mouse){
+    constructor(stage, mouse, types){
         this.stage = stage;
         this.mouse = mouse;
+        this.types = types;
         this.selectionCircle = new maths.Circle(undefined, 5);
         this.completed = new Signal();
     }
@@ -52,17 +53,11 @@ export class SelectObjectOrCreatePoint{
         this.mouse.onUp.remove(this.onClick, this);
     }
 
-    setTypes(types){
-        this.types = types;
-    }
-
     onClick(){
         this.selectionCircle.center.copy(this.mouse);
         this.selectionCircle.radius = 10 / Math.abs(this.stage.scale.x);
 
-        let selection = api.selectInCircle(this.stage.items, this.selectionCircle).filter(item => {
-            return this.types.indexof(item) !== -1;
-        });
+        const selection = api.selectInCircle(this.stage.items, this.selectionCircle);
         const pointRequested = this.types.indexOf(api.pointType) !== -1;
         this.pointCreated = false;
         if(selection.length === 0){
@@ -85,8 +80,9 @@ export class SelectObjectOrCreatePoint{
                     if(objects.length === 0){
                         const intersections = getIntersections(selection.map(o => o.object));
                         if(intersections.length === 0){
-                            const closestObject = pointsInSelection[0].object;
+                            const closestObject = getClosest(selection).object;
                             this.object = api.pointOnObject(closestObject, this.selectionCircle.center);
+                            this.pointCreated = true;
                         }
                         else{
                             this.object = getClosest(intersections.filter(inter => {
@@ -95,6 +91,7 @@ export class SelectObjectOrCreatePoint{
                                 distance:maths.Vector2.dist(this.selectionCircle.center, inter.geom),
                                 object:inter
                             }))).object;
+                            this.pointCreated = true;
                         }
                     }
                     else{

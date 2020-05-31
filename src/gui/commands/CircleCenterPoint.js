@@ -1,5 +1,5 @@
 import Signal from "../../utils/Signal";
-import {SelectOrCreatePoint} from "./SelectOrCreatePoint";
+import {SelectObjectOrCreatePoint} from "./SelectObjectOrCreatePoint";
 import * as api from "../../api";
 
 export class CircleCenterPoint{
@@ -10,7 +10,7 @@ export class CircleCenterPoint{
     }
 
     enable(){
-        this.centerCommand = new SelectOrCreatePoint(this.stage, this.mouse);
+        this.centerCommand = new SelectObjectOrCreatePoint(this.stage, this.mouse, [api.pointType]);
         this.centerCommand.enable();
         this.centerCommand.completed.add(this.onCenter, this);
         this.pointCommand = this.centerCommand;
@@ -37,7 +37,7 @@ export class CircleCenterPoint{
         this.centerCommand.completed.remove(this.onCenter, this);
         this.centerCommand.disable();
 
-        this.pointCommand = new SelectOrCreatePoint(this.stage, this.mouse);
+        this.pointCommand = new SelectObjectOrCreatePoint(this.stage, this.mouse, [api.pointType]);
         this.pointCommand.enable();
         this.pointCommand.completed.add(this.onPoint, this);
         this.pointCommand = this.pointCommand;

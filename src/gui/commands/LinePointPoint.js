@@ -1,5 +1,5 @@
 import Signal from "../../utils/Signal";
-import {SelectOrCreatePoint} from "./SelectOrCreatePoint";
+import {SelectObjectOrCreatePoint} from "./SelectObjectOrCreatePoint";
 import * as api from "../../api";
 
 export class LinePointPoint{
@@ -10,7 +10,7 @@ export class LinePointPoint{
     }
 
     enable(){
-        this.p1Command = new SelectOrCreatePoint(this.stage, this.mouse);
+        this.p1Command = new SelectObjectOrCreatePoint(this.stage, this.mouse, [api.pointType]);
         this.p1Command.enable();
         this.p1Command.completed.add(this.onP1, this);
         this.pointCommand = this.p1Command;
@@ -37,7 +37,7 @@ export class LinePointPoint{
         this.p1Command.completed.remove(this.onP1, this);
         this.p1Command.disable();
 
-        this.p2Command = new SelectOrCreatePoint(this.stage, this.mouse);
+        this.p2Command = new SelectObjectOrCreatePoint(this.stage, this.mouse, [api.pointType]);
         this.p2Command.enable();
         this.p2Command.completed.add(this.onP2, this);
         this.pointCommand = this.p2Command;

@@ -7,35 +7,35 @@ document.body.appendChild(gui.domElement);
 const stage = gui.stage;
 
 /** circum circle **/
-const t1 = gui.ranPt();
-const t2 = gui.ranPt();
-const t3 = gui.ranPt();
-stage.add(t1, t2, t3);
+// const t1 = gui.ranPt();
+// const t2 = gui.ranPt();
+// const t3 = gui.ranPt();
+// stage.add(t1, t2, t3);
 
-const s1 = api.segment(t1, t2);
-const s2 = api.segment(t1, t3);
-const s3 = api.segment(t2, t3);
-stage.add(s1, s2, s3);
+// const s1 = api.segment(t1, t2);
+// const s2 = api.segment(t1, t3);
+// const s3 = api.segment(t2, t3);
+// stage.add(s1, s2, s3);
 
-const m1 = api.segmentBissector(s1);
-const m2 = api.segmentBissector(s2);
-const m3 = api.segmentBissector(s3);
-stage.add(m1, m2, m3);
+// const m1 = api.segmentBissector(s1);
+// const m2 = api.segmentBissector(s2);
+// const m3 = api.segmentBissector(s3);
+// stage.add(m1, m2, m3);
 
-stage.add(
-  api.middle(s1),
-  api.middle(s2),
-  api.middle(s3)
-);
+// stage.add(
+//   api.middle(s1),
+//   api.middle(s2),
+//   api.middle(s3)
+// );
 
-stage.add(api.intersection(m1, m3));
-const circum = api.circle(t1, t2, t3);
-stage.add(circum);
+// stage.add(api.intersection(m1, m3));
+// const circum = api.circle(t1, t2, t3);
+// stage.add(circum);
 
-const p1 = gui.ranPt();
-const p2 = gui.ranPt();
-const l = api.line(p1, p2);
-stage.add(p1, p2, l, api.intersection(l, circum));
+// const p1 = gui.ranPt();
+// const p2 = gui.ranPt();
+// const l = api.line(p1, p2);
+// stage.add(p1, p2, l, api.intersection(l, circum));
 
 // stage.add(api.functionGraph(x => Math.cos(x)));
 // stage.add(api.functionGraph(x => Math.tan(x)));
@@ -67,9 +67,9 @@ stage.add(p1, p2, l, api.intersection(l, circum));
 // stage.add(f(intersections).map(inter => api.segment(inter[0], inter[1])));
 
 /** frame**/
-let origin = api.point(0, 0);
-stage.add(api.vector(origin, api.point(1, 0)));
-stage.add(api.vector(origin, api.point(0, 1)));
+// let origin = api.point(0, 0);
+// stage.add(api.vector(origin, api.point(1, 0)));
+// stage.add(api.vector(origin, api.point(0, 1)));
 
 
 /** Circle point point**/
