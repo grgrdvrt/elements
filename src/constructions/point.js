@@ -120,7 +120,7 @@ export const lineCircleIntersections = makeTypedFunction(
             input:{line, circle},
             update({}, timestamp){
                 pts[0].lastUpdated = pts[1].lastUpdated = timestamp;
-                const hasIntersection = maths.lineCircleDistance(line, circle) <= circle.geom.radius;
+                const hasIntersection = maths.lineCircleDistance(line.geom, circle.geom) <= circle.geom.radius;
                 if(hasIntersection){
                     maths.lineCircleIntersection(line.geom, circle.geom, pts[0].geom, pts[1].geom);
                 }
@@ -146,7 +146,7 @@ export const circlesIntersections = makeTypedFunction(
                 const d = maths.Vector2.dist(c1.geom.center, c2.geom.center);
                 const hasIntersection = d < r1 + r2 && d > Math.abs(r1 - r2);
                 pts[0].isValid = pts[1].isValid = hasIntersection;
-                if(!hasIntersection){
+                if(hasIntersection){
                     maths.circlesIntersections(c1.geom, c2.geom, pts[0].geom, pts[1].geom);
                 }
                 return hasIntersection;
