@@ -174,6 +174,60 @@ export const linesIntersection = makeTypedFunction(
     }
 );
 
+export const segmentsIntersection = makeTypedFunction(
+    [segmentType, segmentType],
+    (s1, s2) => {
+        return {
+            ...basePoint(),
+            description:"segments intersection",
+            input:{s1, s2},
+            update({geom}){
+                const hasIntersection = maths.segmentsIntersect(s1.geom, s2.geom);
+                if(hasIntersection){
+                    maths.segmentsIntersection(s1.geom, s2.geom, geom);
+                }
+                return hasIntersection;
+            }
+        };
+    }
+);
+
+export const segmentCirleIntersection = makeTypedFunction(
+    [segmentType, circleType],
+    (segment, circle) => {
+        return {
+            ...basePoint(),
+            description:"segments intersection",
+            input:{segment, circle},
+            update({geom}){
+                const hasIntersection = maths.segmentsIntersect(segment.geom, circle.geom);
+                if(hasIntersection){
+                    maths.segmentCircleIntersection(segment.geom, circle.geom, geom);
+                }
+                return hasIntersection;
+            }
+        };
+    }
+);
+
+export const segmentLineIntersection = makeTypedFunction(
+    [segmentType, lineType],
+    (segment, line) => {
+        return {
+            ...basePoint(),
+            description:"segments intersection",
+            input:{segment, line},
+            update({geom}){
+                const hasIntersection = maths.segmentsIntersect(segment.geom, line.geom);
+                if(hasIntersection){
+                    maths.segmentLineIntersection(segment.geom, line.geom, geom);
+                }
+                return hasIntersection;
+            }
+        };
+    }
+);
+
 
 export const intersection = makeDispatch(
     lineCircleIntersections,
