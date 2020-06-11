@@ -24,13 +24,13 @@ export function selectInCircle(objects, circle){
       let distance;
       switch(object.type){
         case pointType:
-            distance = maths.vectorsDistance(circle.center, object.geom);
+            distance = maths.pointsDistance(circle.center, object.geom);
             break;
         case lineType:
-            distance = maths.vectorLineDistance(circle.center, object.geom);
+            distance = maths.pointLineDistance(circle.center, object.geom);
             break;
         case circleType:
-            distance = maths.vectorCircleDistance(circle.center, object.geom);
+            distance = maths.pointCircleDistance(circle.center, object.geom);
             break;
         default:
             console.warn("type not handled : " + object.type);

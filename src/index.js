@@ -3,13 +3,12 @@ import Gui from "./gui/CompleteGui";
 
 const gui = new Gui();
 document.body.appendChild(gui.domElement);
-
 const stage = gui.stage;
 
 /** circum circle **/
-// const t1 = gui.ranPt();
-// const t2 = gui.ranPt();
-// const t3 = gui.ranPt();
+// const t1 = gui.randPt();
+// const t2 = gui.randPt();
+// const t3 = gui.randPt();
 // stage.add(t1, t2, t3);
 
 // const s1 = api.segment(t1, t2);
@@ -32,8 +31,8 @@ const stage = gui.stage;
 // const circum = api.circle(t1, t2, t3);
 // stage.add(circum);
 
-// const p1 = gui.ranPt();
-// const p2 = gui.ranPt();
+// const p1 = gui.randPt();
+// const p2 = gui.randPt();
 // const l = api.line(p1, p2);
 // stage.add(p1, p2, l, api.intersection(l, circum));
 
@@ -42,8 +41,8 @@ const stage = gui.stage;
 // stage.add(api.functionGraph(x => 1 / x));
 
 
-// const c1 = api.circle(gui.ranPt(), gui.ranPt());
-// const c2 = api.circle(gui.ranPt(), gui.ranPt());
+// const c1 = api.circle(gui.randPt(), gui.randPt());
+// const c2 = api.circle(gui.randPt(), gui.randPt());
 // let inters = api.circlesIntersections(c1, c2);
 // stage.add(c1, c2, inters);
 
@@ -73,17 +72,17 @@ const stage = gui.stage;
 
 
 /** Circle point point**/
-// let p1 = gui.ranPt();
-// let p2 = gui.ranPt();
+// let p1 = gui.randPt();
+// let p2 = gui.randPt();
 // let ci = api.circle(p1, p2);
 // stage.add(p1, p2, ci);
 ``
 
 /**VARIGNON**/
-// let pa = gui.ranPt();
-// let pb = gui.ranPt();
-// let pc = gui.ranPt();
-// let pd = gui.ranPt();
+// let pa = gui.randPt();
+// let pb = gui.randPt();
+// let pc = gui.randPt();
+// let pd = gui.randPt();
 
 // let sa = api.segment(pa, pb);
 // let sb = api.segment(pb, pc);
@@ -107,9 +106,13 @@ const stage = gui.stage;
 // });
 
 
-// const pts = [];
-// for(let i = 0; i < 500; i++) pts.push(gui.ranPt())
-// stage.add(pts.map(pt => api.circle(pt, gui.mouse)));
+const pts = [];
+const pt = gui.randPt();
+for(let i = 0; i < 500; i++) pts.push(gui.randPt());
+stage.add(pt, pts.map(p => api.circle(p, pt)));
 
+
+// const pt = gui.randPt();
+// stage.add(pt, api.circle(pt, api.scalar(0.15)));
 
 gui.start();

@@ -6,9 +6,9 @@ document.body.appendChild(gui.domElement);
 
 const stage = gui.stage;
 
-const t1 = gui.ranPt();
-const t2 = gui.ranPt();
-const t3 = gui.ranPt();
+const t1 = gui.randPt();
+const t2 = gui.randPt();
+const t3 = gui.randPt();
 stage.add(t1, t2, t3);
 
 const s1 = api.segment(t1, t2);

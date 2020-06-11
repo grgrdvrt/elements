@@ -246,7 +246,7 @@ export const pointOnLine = makeTypedFunction(
             description:"point on line",
             input:{line},
             update({geom}){
-                maths.projectVectorOnLine(geom, line.geom);
+                maths.projectPointOnLine(geom, line.geom);
             }
         };
     }
@@ -262,22 +262,11 @@ export const pointOnCircle = makeTypedFunction(
             description:"point on circle",
             input:{circle},
             update({geom}){
-                maths.projectVectorOnCircle(geom, circle.geom, geom);
+                maths.projectPointOnCircle(geom, circle.geom, geom);
             }
         };
     }
 );
-
-
-export const mouse = (stage, mouse) => ({
-    ...basePoint(),
-    selectable : false,
-    description:"mouse",
-    input:{},
-    update({geom}){
-        geom.copy(mouse.position);
-    }
-});
 
 
 

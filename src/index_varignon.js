@@ -6,10 +6,10 @@ document.body.appendChild(gui.domElement);
 
 let stage = gui.stage;
 
-let pa = gui.ranPt();
-let pb = gui.ranPt();
-let pc = gui.ranPt();
-let pd = gui.ranPt();
+let pa = gui.randPt();
+let pb = gui.randPt();
+let pc = gui.randPt();
+let pd = gui.randPt();
 
 let sa = api.segment(pa, pb);
 let sb = api.segment(pb, pc);

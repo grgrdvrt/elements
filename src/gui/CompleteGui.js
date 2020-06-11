@@ -33,13 +33,6 @@ export default class CompleteGui{
         this.stage = new Stage(this.canvas, {window:this.window.clone()});
 
         this.mouseController = new Mouse(this.stage);
-        this.mouse = api.mouse(this.stage, this.mouseController);
-
-        let radius = api.scalar(10 / Math.abs(this.stage.scale.x));
-        this.mouseCircle = api.circle(this.mouse, radius);
-        this.mouseCircle.selectable = false;
-        this.stage.add(this.mouseCircle);
-
 
         let selector = new ToolsSelector([
             new Tool(this.stage, this.mouseController, commands.DragPoint, "drag point", "icon"),
@@ -68,7 +61,7 @@ export default class CompleteGui{
         }
     }
 
-    ranPt(){
+    randPt(){
         return api.randomPoint(this.stage.window);
     }
 
@@ -87,7 +80,6 @@ export default class CompleteGui{
     update(){
         let timeStamp = Date.now();
         this.updateCallback(timeStamp);
-        this.mouseCircle.input.radius.value = 10 / Math.abs(this.stage.scale.x);
         let w = this.stage.window;
         this.stage.clear();
         this.stage.draw(timeStamp);

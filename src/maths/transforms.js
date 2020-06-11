@@ -3,7 +3,7 @@ import * as maths from "./index";
 /** axial symmetry **/
 export function pointAxialSymmetry(point, axis){
     let tmp = point.clone();
-    pointCentralSymmetry(point, maths.projectVectorOnLine(tmp, axis));
+    pointCentralSymmetry(point, maths.projectPointOnLine(tmp, axis));
     tmp.dispose();
     return point;
 }

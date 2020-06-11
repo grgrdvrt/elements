@@ -10,20 +10,20 @@ const stage = gui.stage;
 const angle = api.scalar(Math.random() * 2 * Math.PI);
 /** transforms **/
 {
-    const pt = gui.ranPt();
+    const pt = gui.randPt();
     stage.add(pt);
 
-    const circleCenter = gui.ranPt();
-    const circle = api.circle(circleCenter, gui.ranPt());
+    const circleCenter = gui.randPt();
+    const circle = api.circle(circleCenter, gui.randPt());
     stage.add(circleCenter, circle);
 
-    const linePt = gui.ranPt();
-    const line = api.line(linePt, gui.ranPt());
+    const linePt = gui.randPt();
+    const line = api.line(linePt, gui.randPt());
     stage.add(linePt, line);
 
     /** translations **/
     // {
-    //     const vec = api.vector(gui.ranPt(), gui.ranPt());
+    //     const vec = api.vector(gui.randPt(), gui.randPt());
     //     vec.style.stroke = "red";
     //     stage.add(vec);
 
@@ -48,7 +48,7 @@ const angle = api.scalar(Math.random() * 2 * Math.PI);
 
     /** rotations **/
     {
-        const center = gui.ranPt();
+        const center = gui.randPt();
         center.style.fill = "blue";
         stage.add(center);
 
